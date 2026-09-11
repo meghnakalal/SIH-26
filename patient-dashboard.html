@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="page_title.patient">Patient Dashboard — Swasthya Setu | Maharashtra Medical Council</title>
+    <meta
+      name="description"
+      content="Rural citizen health portal for Sita Devi under Maharashtra Medical Council Swasthya Setu. View appointments, health timeline, documents, and nearby medicine availability." />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/png" href="assets/mmc_logo.png" />
+
+    <!-- Authentication Gatekeeper & Role Guard -->
+    <script>
+      (function() {
+        const userLoggedOut = sessionStorage.getItem("userLoggedOut") === "true";
+        if (userLoggedOut) {
+          window.location.replace("login.html");
+          return;
+        }
+        if (localStorage.getItem("loggedIn") !== "true" || localStorage.getItem("userRole") !== "patient") {
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("userRole", "patient");
+          localStorage.setItem("userName", "Sita Devi");
+          sessionStorage.setItem("loggedIn", "true");
+          sessionStorage.setItem("userRole", "patient");
+          sessionStorage.setItem("userName", "Sita Devi");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Top Utility Government Bar -->
+    <div class="gov-topbar">
+      <div class="container gov-topbar-content">
+        <div class="gov-topbar-left">
+          <span class="gov-badge">
+            <img
+              src="assets/mmc_logo.png"
+              alt="Govt Emblem"
+              class="gov-emblem-small" />
+            <span data-i18n="gov.title">Government of Maharashtra</span>
+          </span>
+          <span style="opacity: 0.4">|</span>
+          <span class="gov-contact-item" data-i18n="p_dash.banner_portal">Citizen Health Portal • Swasthya Setu</span>
+        </div>
+        <div class="gov-topbar-right">
+          <div class="accessibility-controls" title="Adjust Text Size" data-i18n-title="gov.font_adjust">
+            <button id="fontDecBtn" class="font-resize-btn" aria-label="Decrease Font Size">A-</button>
+            <button id="fontResetBtn" class="font-resize-btn" aria-label="Reset Font Size">A</button>
+            <button id="fontIncBtn" class="font-resize-btn" aria-label="Increase Font Size">A+</button>
+          </div>
+          <div class="lang-select-wrapper">
+            <span class="lang-globe-icon" aria-hidden="true">🌐</span>
+            <select
+              id="langSelect"
+              class="lang-select"
+              aria-label="Select Language">
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+              <option value="mr">मराठी</option>
+            </select>
+          </div>
+          <div id="userSessionPill" class="gov-user-pill">
+            <span id="userSessionRoleIcon">👤</span>
+            <span id="userSessionName" data-i18n="features.patient_sita">Sita Devi</span>
+          </div>
+          <button id="logoutBtn" class="gov-logout-btn" title="Sign out">
+            <span>🚪</span> <span data-i18n="gov.logout">Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Official Main Navbar -->
+    <header class="site-navbar">
+      <div class="container navbar-container">
+        <a href="index.html" class="brand-link" id="navBrandLink">
+          <img
+            src="assets/mmc_logo.png"
+            alt="Maharashtra Medical Council Logo"
+            class="brand-logo-img" />
+          <div class="brand-text">
+            <span class="brand-title" data-i18n="brand.title">Maharashtra Medical Council, Mumbai</span>
+            <span class="brand-subtitle" data-i18n="common.portal_patient">Swasthya Setu — Citizen Patient Portal</span>
+          </div>
+        </a>
+
+        <nav class="desktop-nav">
+          <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
+            <li><a href="patient-dashboard.html" class="nav-link active" data-i18n="nav.my_dashboard">My Dashboard</a></li>
+            <li><a href="#patientAppointmentsSection" class="nav-link" data-i18n="nav.appointments">Appointments</a></li>
+            <li><a href="#patientHealthHistorySection" class="nav-link" data-i18n="nav.health_records">Health Records</a></li>
+            <li><a href="#patientMedicineSection" class="nav-link" data-i18n="nav.medicines">Medicine Availability</a></li>
+            <li><a href="about.html" target="_blank" class="nav-link" data-i18n="nav.about">About</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem">
+          <button id="mobileNavToggle" class="mobile-nav-toggle" aria-label="Open Navigation Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation">
+      <div class="drawer-header">
+        <div style="font-weight: 800; color: #ffffff" data-i18n="drawer.patient_title">Swasthya Setu — Patient Portal</div>
+        <button id="drawerCloseBtn" data-i18n="common.modal_close" data-i18n="common.modal_close" class="drawer-close-btn" aria-label="Close Navigation Menu">✕</button>
+      </div>
+      <div class="drawer-lang-section" style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-slate-200);">
+        <label for="drawerLangSelect" class="drawer-lang-label" data-i18n="gov.lang_select">Language / भाषा :</label>
+        <div class="drawer-lang-wrapper">
+          <span class="lang-globe-icon" aria-hidden="true">🌐</span>
+          <select id="drawerLangSelect" class="drawer-lang-select" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+            <option value="mr">मराठी</option>
+          </select>
+        </div>
+      </div>
+      <div class="drawer-body">
+        <a href="index.html" class="drawer-link" data-i18n="nav.home">Home</a>
+        <a href="patient-dashboard.html" class="drawer-link active" data-i18n="nav.my_dashboard">My Dashboard</a>
+        <a href="#patientAppointmentsSection" class="drawer-link" data-i18n="nav.appointments">Appointments</a>
+        <a href="#patientHealthHistorySection" class="drawer-link" data-i18n="nav.health_records">Health Records</a>
+        <a href="#patientMedicineSection" class="drawer-link" data-i18n="nav.medicines">Medicine Availability</a>
+        <a href="about.html" class="drawer-link" data-i18n="nav.about">About</a>
+        <button id="drawerLogoutBtn" class="drawer-link" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer; color: #ef4444;">
+          🚪 <span data-i18n="gov.logout">Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Patient Welcome Section / Hero Banner -->
+      <section class="role-hero-banner">
+        <div class="container role-hero-flex">
+          <div class="role-hero-profile">
+            <div class="role-avatar-circle" title="Citizen Profile">
+              👤
+            </div>
+            <div class="role-profile-details">
+              <div class="role-hero-greeting" data-i18n="p_dash.profile_title">Citizen Health Profile</div>
+              <h1 class="role-hero-name" data-i18n="p_dash.welcome">Welcome, Sita Devi</h1>
+              <div class="role-hero-meta">
+                <span class="role-meta-tag" data-i18n="p_dash.id_badge">🪪 ID: MMC-PT-108</span>
+                <span class="role-meta-tag" data-i18n="p_dash.age_gender">🎂 Age: 28 Yrs • Female</span>
+                <span class="role-meta-tag" data-i18n="p_dash.village">📍 Village: Vadgaon</span>
+                <span class="role-meta-tag" style="background: rgba(34, 197, 94, 0.2); border-color: #86efac;">
+                  <span class="status-online-dot"></span> <span data-i18n="p_dash.anc_badge">2nd Trimester ANC (Monitored)</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="role-hero-actions">
+            <button type="button" id="patientBookApptBtn" class="btn-hero-action" onclick="openPatientBookModal();">
+              <span>📅</span> <span data-i18n="p_dash.btn_book_appt">Book New Appointment</span>
+            </button>
+            <a href="#patientEmergencySection" class="btn-hero-secondary" style="background: rgba(220, 38, 38, 0.35); border-color: #f87171;">
+              <span>🚨</span> <span data-i18n="p_dash.btn_emergency_sos">Emergency SOS</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+        
+        <!-- 7 Main Actions Grid (Requirement 2) -->
+        <div style="margin-bottom: 2.5rem;">
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin-bottom: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>⚡</span> <span data-i18n="p_dash.quick_services">Quick Patient Services</span>
+          </h2>
+          <div class="field-action-grid">
+            <!-- 1. Book Appointment -->
+            <div class="field-action-card" id="patientBookApptCard" onclick="openPatientBookModal();">
+              <div class="action-icon-circle">📅</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.act_book">Book Appointment</div>
+                <div class="action-desc" data-i18n="p_dash.act_book_desc">Select slot with Dr. Sharma or PHC medical officers</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </div>
+
+            <!-- 2. View My Appointments -->
+            <a href="#patientAppointmentsSection" class="field-action-card" id="patientViewApptsCard">
+              <div class="action-icon-circle">📋</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.act_view_appts">View My Appointments</div>
+                <div class="action-desc" data-i18n="p_dash.act_view_appts_desc">Track active queues, OPD token, and clinic timings</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </a>
+
+            <!-- 3. View / Upload Documents -->
+            <div class="field-action-card" id="patientUploadDocBtn">
+              <div class="action-icon-circle">📄</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.act_upload_doc">View / Upload Documents</div>
+                <div class="action-desc" data-i18n="p_dash.act_upload_doc_desc">Upload lab test, ultrasound scan, or discharge slip</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </div>
+
+            <!-- 4. View Health History -->
+            <a href="#patientHealthHistorySection" class="field-action-card">
+              <div class="action-icon-circle">🩺</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.act_history">View Health History</div>
+                <div class="action-desc" data-i18n="p_dash.act_history_desc">Complete timeline of consultations and prescriptions</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </a>
+
+            <!-- 5. Medicine Availability -->
+            <a href="#patientMedicineSection" class="field-action-card">
+              <div class="action-icon-circle">💊</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.act_meds">Medicine Availability</div>
+                <div class="action-desc" data-i18n="p_dash.act_meds_desc">Locate pharmacy stock at Sub-Centre & nearby PHCs</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </a>
+
+            <!-- 6. My Follow-Ups -->
+            <a href="#patientFollowUpsSection" class="field-action-card">
+              <div class="action-icon-circle">🔔</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.act_followups">My Follow-Ups</div>
+                <div class="action-desc" data-i18n="p_dash.act_followups_desc">Next ANC check, ASHA home visits, and reminders</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </a>
+
+            <!-- 7. Emergency Help -->
+            <a href="#patientEmergencySection" class="field-action-card emergency">
+              <div class="action-icon-circle">🚨</div>
+              <div class="action-content">
+                <div class="action-title" style="color: #b91c1c;" data-i18n="p_dash.act_emergency">Emergency Help</div>
+                <div class="action-desc" data-i18n="p_dash.act_emergency_desc">108 Ambulance dispatch & immediate ASHA alert</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Appointment Section (Requirement 2) -->
+        <section id="patientAppointmentsSection" style="margin-bottom: 3rem; scroll-margin-top: 5rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+              <span>📅</span> <span data-i18n="p_dash.upcoming_appt">Upcoming Appointment</span>
+            </h2>
+            <button type="button" id="patientBookAnotherBtn" class="btn-auth-primary" style="padding: 0.45rem 1rem; font-size: 0.825rem;" onclick="openPatientBookModal();" data-i18n="p_dash.btn_book_another">
+              + Book Another Slot
+            </button>
+          </div>
+
+          <!-- Active Appointment Card -->
+          <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05); position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: var(--color-primary-main);"></div>
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+                  <span class="triage-badge triage-badge-high" data-i18n="p_dash.high_prio_followup">🔴 High Priority Follow-Up</span>
+                  <span class="triage-badge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;" data-i18n="p_dash.active_in_queue">Active In Queue</span>
+                </div>
+                <h3 id="patientActiveApptDoctor" style="font-size: 1.3rem; font-weight: 800; color: var(--color-primary-darkest); margin: 0 0 0.35rem 0;" data-i18n="p_dash.active_appt_heading">
+                  Dr. Sharma • PHC ABC
+                </h3>
+                <div style="font-size: 0.85rem; color: #64748b; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                  <span id="patientActiveApptFacility" data-i18n="p_dash.active_appt_facility">🏥 Primary Health Centre Vadgaon Block</span>
+                  <span id="patientActiveApptTime" data-i18n="p_dash.active_appt_time">🗓 10 September 2026 at 10:30 AM (In-Person OPD)</span>
+                  <span id="patientActiveApptRefId" style="font-size: 0.75rem; font-family: monospace; color: #475569; background: #f1f5f9; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700;">Ref: APT-1001</span>
+                </div>
+              </div>
+              <div style="text-align: right; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-md); padding: 0.75rem 1.25rem;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #15803d; text-transform: uppercase;" data-i18n="p_dash.queue_token_title">Live Queue Token</div>
+                <div id="patientActiveApptToken" style="font-size: 1.85rem; font-weight: 800; color: var(--color-primary-darkest); line-height: 1.1;" data-i18n="p_dash.token_val">
+                  Token #04
+                </div>
+                <div style="font-size: 0.725rem; color: #166534;" data-i18n="p_dash.est_wait">Estimated Wait: 15 mins</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; font-size: 0.825rem;">
+              <div style="color: #475569;">
+                <strong data-i18n="p_dash.reason_lbl">Reason:</strong> <span data-i18n="p_dash.scan_title">2nd Trimester Anomaly Scan & Gestational BP Review (Screened by ASHA Sunita Tai)</span>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" class="btn-hero-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.775rem; color: var(--color-primary-darkest); border-color: #cbd5e1;" onclick="showToast(t('toast.token_refreshed', '✓ Token refreshed. Doctor is currently at Token #03.'))" data-i18n="p_dash.refresh_queue">
+                  🔄 Refresh Queue Status
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- All Scheduled Consultations List -->
+          <div style="margin-top: 1.5rem; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem;">
+              <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--color-primary-darkest); margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+                <span>📋</span> <span data-i18n="p_dash.my_appts_list_title">My Scheduled Consultations & OPD Queue</span>
+              </h3>
+              <span id="patientApptsCountBadge" class="triage-badge triage-badge-normal" style="font-size: 0.725rem;">1 Active</span>
+            </div>
+            <div class="opd-queue-table-wrap" style="border: 1px solid #e2e8f0; border-radius: var(--radius-md); overflow-x: auto;">
+              <table class="opd-queue-table" style="margin: 0; width: 100%;">
+                <thead>
+                  <tr>
+                    <th data-i18n="p_dash.th_doctor_facility">Doctor & Facility</th>
+                    <th data-i18n="p_dash.th_date_slot">Date & Time Slot</th>
+                    <th data-i18n="p_dash.th_token_mode">Token & Type</th>
+                    <th data-i18n="p_dash.th_status">Status</th>
+                    <th data-i18n="asha_dash.th_actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="patientAppointmentsListBody">
+                  <!-- Rendered dynamically by app.js from state.appointments -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Health History Timeline (Requirement 2) -->
+        <section id="patientHealthHistorySection" style="margin-bottom: 3rem; scroll-margin-top: 5rem;">
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin-bottom: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🩺</span> <span data-i18n="p_dash.history_title">Health History & Care Timeline</span>
+          </h2>
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.5rem 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+            <div style="border-left: 3px solid #cbd5e1; padding-left: 1.75rem; margin-left: 0.5rem; display: flex; flex-direction: column; gap: 1.75rem; position: relative;">
+              
+              <!-- Timeline Item 1 -->
+              <div style="position: relative;">
+                <div style="position: absolute; left: -2.35rem; top: 0.15rem; width: 18px; height: 18px; border-radius: 50%; background: #dc2626; border: 3px solid #ffffff; box-shadow: 0 0 0 2px #fca5a5;"></div>
+                <div style="font-size: 0.75rem; font-weight: 800; color: #dc2626; text-transform: uppercase;" data-i18n="p_dash.ref_initiated">08 September 2026 • Referral Initiated</div>
+                <div style="font-weight: 800; font-size: 1.05rem; color: #1e293b; margin: 0.2rem 0;" data-i18n="p_dash.ref_title">Obstetric Ultrasound Referral (REF-1024)</div>
+                <p style="font-size: 0.825rem; color: #475569; margin: 0.2rem 0 0.5rem 0; line-height: 1.4;"><span data-i18n="p_dash.ref_to">Referred to</span> <strong data-i18n="p_dash.ref_hospital">Rural Hospital Vadgaon</strong> <span data-i18n="p_dash.ref_reason_full">by Dr. Sharma for fetal anatomy evaluation and Doppler study due to borderline gestational hypertension (138/88 mmHg).</span></p>
+                <span class="triage-badge triage-badge-high" data-i18n="p_dash.ref_badge_stage">Referral Active: Referred Stage</span>
+              </div>
+
+              <!-- Timeline Item 2 -->
+              <div style="position: relative;">
+                <div style="position: absolute; left: -2.35rem; top: 0.15rem; width: 18px; height: 18px; border-radius: 50%; background: var(--color-primary-main); border: 3px solid #ffffff; box-shadow: 0 0 0 2px var(--color-primary-light);"></div>
+                <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem;" data-i18n="p_dash.past_consult_date">25 August 2026 • PHC Consultation</div>
+                <div style="font-weight: 800; font-size: 1.05rem; color: #1e293b; margin: 0.2rem 0;" data-i18n="p_dash.tl_scan_title">Antenatal Visit with Dr. Sharma (PHC ABC)</div>
+                <p style="font-size: 0.825rem; color: #475569; margin: 0.2rem 0 0.5rem 0; line-height: 1.4;" data-i18n="p_dash.tl_scan_desc">
+                  Fundal height corresponding to 22 weeks. Fetal heart rate normal (144 bpm). Mild pedal edema noted. 
+                  Prescription issued: Tab IFA (1 daily) + Tab Calcium 500mg (twice daily). Advised low salt intake.
+                </p>
+                <div style="font-size: 0.775rem; font-weight: 600; color: #15803d; background: #f0fdf4; padding: 0.35rem 0.75rem; border-radius: var(--radius-sm); display: inline-block;" data-i18n="p_dash.tl_med_prescribed">
+                  💊 Prescribed: Iron & Folic Acid 90 Days • Tab Calcium 500mg
+                </div>
+              </div>
+
+              <!-- Timeline Item 3 -->
+              <div style="position: relative;">
+                <div style="position: absolute; left: -2.35rem; top: 0.15rem; width: 18px; height: 18px; border-radius: 50%; background: #3b82f6; border: 3px solid #ffffff; box-shadow: 0 0 0 2px #bfdbfe;"></div>
+                <div style="font-size: 0.75rem; font-weight: 800; color: #2563eb; text-transform: uppercase;" data-i18n="p_dash.tl_lab_title">18 August 2026 • Laboratory Investigation</div>
+                <div style="font-weight: 800; font-size: 1.05rem; color: #1e293b; margin: 0.2rem 0;" data-i18n="p_dash.tl_lab_sub">Diagnostic Lab Report (Vadgaon Health Sub-Centre)</div>
+                <p style="font-size: 0.825rem; color: #475569; margin: 0.2rem 0 0.5rem 0; line-height: 1.4;">
+                  <span data-i18n="p_dash.cbc_results_desc">CBC & Blood Sugar results: Hemoglobin 10.2 g/dL (Mild Anemia), Blood Sugar Fasting 86 mg/dL (Normal), Urine Protein / Albumin: Nil.</span>
+                </p>
+                <span class="triage-badge triage-badge-priority" data-i18n="p_dash.hb_monitored" data-i18n="p_dash.hb_monitored">Hb: 10.2 g/dL (Monitored)</span>
+              </div>
+
+              <!-- Timeline Item 4 -->
+              <div style="position: relative;">
+                <div style="position: absolute; left: -2.35rem; top: 0.15rem; width: 18px; height: 18px; border-radius: 50%; background: #10b981; border: 3px solid #ffffff; box-shadow: 0 0 0 2px #a7f3d0;"></div>
+                <div style="font-size: 0.75rem; font-weight: 800; color: #059669; text-transform: uppercase;" data-i18n="p_dash.tl_reg_date">02 May 2026 • Baseline Registration</div>
+                <div style="font-weight: 800; font-size: 1.05rem; color: #1e293b; margin: 0.2rem 0;" data-i18n="p_dash.tl_reg_title">Early ANC Registration & MCP Card Issuance</div>
+                <p style="font-size: 0.825rem; color: #475569; margin: 0.2rem 0; line-height: 1.4;">
+                  <span data-i18n="p_dash.mcp_gen_desc">Registered by ASHA Worker Sunita Tai under Sub-Centre Vadgaon circle. Mother and Child Protection (MCP) card generated.</span>
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Documents Section (Requirement 2) -->
+        <section id="patientDocsSection" style="margin-bottom: 3rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--color-primary-darkest); margin: 0; display: flex; align-items: center; gap: 0.5rem;"><span>📄</span> <span data-i18n="p_dash.docs_title">My Medical Documents</span></h2>
+            <button type="button" class="btn-auth-primary" style="padding: 0.45rem 1rem; font-size: 0.825rem;" onclick="document.getElementById('patientUploadDocBtn').click();" data-i18n="p_dash.btn_upload">
+              + Upload Document
+            </button>
+          </div>
+
+          <div class="field-action-grid" id="patientDocsGrid">
+            <!-- Doc 1: Prescription -->
+            <div class="field-action-card" onclick="showToast(t('toast.download_pdf', 'Downloading PHC Prescription PDF (25 Aug 2026)...'));">
+              <div class="action-icon-circle">💊</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.doc1_title">PHC Prescription Slip</div>
+                <div class="action-desc" data-i18n="p_dash.doc1_desc">Dr. Sharma • 25 Aug 2026 • Iron & Calcium</div>
+              </div>
+              <span class="action-arrow" data-i18n="p_dash.btn_view_pdf" data-i18n="p_dash.btn_pdf">⬇ PDF</span>
+            </div>
+
+            <!-- Doc 2: Lab Report -->
+            <div class="field-action-card" onclick="showToast(t('toast.opening_lab', 'Opening CBC Lab Report: Hemoglobin 10.2 g/dL...'));">
+              <div class="action-icon-circle">🧪</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.doc2_title">CBC & Urine Lab Report</div>
+                <div class="action-desc" data-i18n="p_dash.doc2_desc">Vadgaon Lab • 18 Aug 2026 • Verified</div>
+              </div>
+              <span class="action-arrow" data-i18n="p_dash.btn_pdf">⬇ PDF</span>
+            </div>
+
+            <!-- Doc 3: Referral Document -->
+            <div class="field-action-card" onclick="showToast(t('toast.view_referral', 'Viewing E-Referral Slip REF-1024 with QR code...'));">
+              <div class="action-icon-circle">🔄</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.doc3_title">Referral Slip (REF-1024)</div>
+                <div class="action-desc" data-i18n="p_dash.doc3_desc">PHC to Rural Hospital • High Priority Scan</div>
+              </div>
+              <span class="action-arrow" data-i18n="p_dash.btn_down_qr">⬇ QR</span>
+            </div>
+
+            <!-- Doc 4: MCP Medical Record -->
+            <div class="field-action-card" onclick="showToast('Viewing Mother & Child Protection (MCP) Digital Record...');">
+              <div class="action-icon-circle">🪪</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.doc4_title">MCP Mother & Child Card</div>
+                <div class="action-desc" data-i18n="p_dash.state_health_card">RCH MH-VAD-2026 • State Health Card</div>
+              </div>
+              <span class="action-arrow" data-i18n="p_dash.btn_down_card">⬇ Card</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Medicine Availability Section (Requirement 2) -->
+        <section id="patientMedicineSection" style="margin-bottom: 3rem; scroll-margin-top: 5rem;">
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>💊</span> <span data-i18n="p_dash.med_avail_title">Nearby Medicine Availability</span>
+          </h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;" data-i18n="p_dash.med_desc">
+            Check real-time stock at your local Sub-Centre and Primary Health Centres to prevent unnecessary long travel.
+          </p>
+
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+            <div style="margin-bottom: 1.25rem;">
+              <label for="patientMedSearchInput" class="auth-label" data-i18n="p_dash.search_med_label">Search Medicine Name</label>
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">🔍</span>
+                <input
+                  type="text"
+                  id="patientMedSearchInput"
+                  class="auth-input"
+                  placeholder="e.g. Paracetamol, Iron & Folic Acid, Calcium..."
+                  value="Paracetamol" />
+              </div>
+            </div>
+
+            <!-- Results container -->
+            <div id="patientMedSearchResults">
+              <!-- Dynamically populated by app.js -->
+            </div>
+
+            <div class="med-travel-savings">
+              <span>💡</span> <strong data-i18n="p_dash.saves_travel_strong">Saves You Unnecessary Travel:</strong> <span data-i18n="p_dash.saves_travel_desc">You can collect your prescription at Sub-Centre Vadgaon (0.8 km away) instead of traveling 5.2 km to PHC XYZ!</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Follow-Ups Section (Requirement 2) -->
+        <section id="patientFollowUpsSection" style="margin-bottom: 3rem;">
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #1e293b; margin: 0; margin-bottom: 1.15rem; display: flex; align-items: center; gap: 0.5rem;"><span>🔔</span> <span data-i18n="p_dash.followups_title">My Upcoming Follow-Ups</span></h2>
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+            <div class="field-action-card" style="margin-bottom: 0.85rem; border-color: #fcd34d; background: #fffbeb;">
+              <div class="action-icon-circle" style="background: #fef3c7; color: #b45309;">🔔</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.flw1_title">2nd Trimester ANC Follow-Up & Blood Pressure Check</div>
+                <div class="action-desc"><span data-i18n="common.lbl_due">Due:</span> <strong>10 September 2026</strong> <span data-i18n="p_dash.flw_assigned_sunita">• Assigned to ASHA Worker</span> <strong data-i18n="common.name_sunita">Sunita Tai</strong> <span data-i18n="common.subcentre_vadgaon">(Sub-Centre Vadgaon)</span></div>
+              </div>
+              <span class="triage-badge triage-badge-priority" data-i18n="asha_dash.filter_today">Due Today</span>
+            </div>
+
+            <div class="field-action-card" style="margin-bottom: 0;">
+              <div class="action-icon-circle">🏥</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="p_dash.flw2_title">Ultrasonography Counter-Check (Rural Hospital)</div>
+                <div class="action-desc"><span data-i18n="common.lbl_due">Due:</span> <strong>15 September 2026</strong> <span data-i18n="p_dash.flw_post_ref">• Post-Referral Review</span></div>
+              </div>
+              <span class="triage-badge" style="background: #eff6ff; color: #1d4ed8;" data-i18n="asha_dash.filter_upcoming">Upcoming</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Emergency Assistance Section (Requirement 2) -->
+        <section id="patientEmergencySection">
+          <div class="emergency-sos-card">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.2); padding: 0.2rem 0.6rem; border-radius: var(--radius-full); font-size: 0.725rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;" data-i18n="dash.emergency_title">
+                🚨 24/7 Frontline Emergency
+              </div>
+              <h3 data-i18n="p_dash.urgent_title">Need Urgent Medical Assistance?</h3>
+              <p data-i18n="p_dash.urgent_desc">
+                Immediate medical distress, severe abdominal pain, high fever, or labor warning signs? Reach frontline help instantly.
+              </p>
+            </div>
+            <div class="emergency-btn-group">
+              <button type="button" id="patientEmergencyBtn" class="btn-emergency-call" style="background: #fee2e2; color: #991b1b;" onclick="openModal(document.getElementById('patientEmergencyModal'))"><span>🚨</span> <span data-i18n="dash.dispatch_108">Dispatch 108 Ambulance</span></button>
+              <a href="tel:9823456789" class="btn-emergency-call" style="background: #e0f2fe; color: #0369a1;"><span>📞</span> <span data-i18n="dash.call_asha">Call ASHA Sunita Tai</span></a>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ======================================================================
+         MODALS
+         ====================================================================== -->
+
+    <!-- Modal 1: Book Appointment -->
+    <div id="patientBookApptModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 500px;">
+        <div class="modal-header">
+          <div class="modal-title" data-i18n="features.slot_booking_title">📅 Book Doctor Appointment</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('patientBookApptModal'))">✕</button>
+        </div>
+        <form id="patientBookApptForm">
+          <div class="auth-form-group">
+            <label class="auth-label" data-i18n="features.patient_label">Patient Name</label>
+            <input type="text" id="patientApptPatientName" class="auth-input" value="Sita Devi (MMC-PT-108)" readonly style="background: #f8fafc; font-weight: 600;" />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="patientApptFacility" data-i18n="p_dash.select_facility">Select Healthcare Facility *</label>
+            <select id="patientApptFacility" class="auth-input" required>
+              <option value="PHC ABC, Vadgaon Block" data-i18n="opt.facility_phc_abc">PHC ABC, Vadgaon Block</option>
+              <option value="Rural Hospital, Vadgaon" data-i18n="opt.facility_rh_vadgaon">Rural Hospital, Vadgaon (Specialist Center)</option>
+              <option value="Sub-Centre Vadgaon" data-i18n="opt.facility_subcentre">Sub-Centre Vadgaon</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="patientApptDoctor" data-i18n="p_dash.doc_name">Select Doctor / Medical Officer *</label>
+            <select id="patientApptDoctor" class="auth-input" required>
+              <option value="Dr. Sharma" data-i18n="doc_opt.sharma">Dr. Sharma (Medical Officer — PHC ABC)</option>
+              <option value="Dr. Patil" data-i18n="doc_opt.patil">Dr. Patil (Gynecologist — Rural Hospital)</option>
+              <option value="Dr. Kulkarni" data-i18n="doc_opt.kulkarni">Dr. Kulkarni (General Physician — Sub-Centre Vadgaon)</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="patientApptDate" data-i18n="p_dash.consult_date">Consultation Date *</label>
+            <input type="date" id="patientApptDate" class="auth-input" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="patientApptTime" data-i18n="p_dash.pref_slot">Preferred Slot *</label>
+            <select id="patientApptTime" class="auth-input" required>
+              <option value="10:00 AM" data-i18n="slot_opt.1000">10:00 AM — Available</option>
+              <option value="10:30 AM" data-i18n="slot_opt.1030">10:30 AM — Available</option>
+              <option value="11:15 AM" data-i18n="slot_opt.1115">11:15 AM — Available</option>
+              <option value="02:30 PM" data-i18n="slot_opt.1430">02:30 PM — Available</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="patientApptType" data-i18n="p_dash.consult_type">Consultation Type *</label>
+            <select id="patientApptType" class="auth-input" required>
+              <option value="In-Person (OPD)" data-i18n="mode_opt.inperson">In-Person Clinic Consultation (OPD)</option>
+              <option value="Teleconsultation" data-i18n="mode_opt.teleconsult">Teleconsultation at Sub-Centre with ASHA</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-auth-primary" style="width: 100%;" data-i18n="p_dash.btn_confirm_booking">
+            Confirm Appointment Booking ➔
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 2: Upload Document -->
+    <div id="patientUploadDocModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 480px;">
+        <div class="modal-header">
+          <div class="modal-title" data-i18n="p_dash.act_upload_doc">📄 Upload Medical Document</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('patientUploadDocModal'))">✕</button>
+        </div>
+        <form id="patientUploadDocForm">
+          <div class="auth-form-group">
+            <label class="auth-label" for="patientDocTitle" data-i18n="p_dash.doc_title_label">Document Title *</label>
+            <input type="text" id="patientDocTitle" class="auth-input" placeholder="e.g. Ultrasound Scan Report" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="patientDocType" data-i18n="p_dash.doc_type_label">Document Type *</label>
+            <select id="patientDocType" class="auth-input" required>
+              <option value="Lab Report" data-i18n="doc_upload.lab">Lab Report (Blood / Urine)</option>
+              <option value="Prescription" data-i18n="doc_upload.rx">Doctor Prescription</option>
+              <option value="Referral Document" data-i18n="doc_upload.ref">Referral Slip / Discharge</option>
+              <option value="Medical Record" data-i18n="doc_upload.prev">Previous Medical Record</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="patientDocFile" data-i18n="p_dash.select_file">Select File (PDF / Image) *</label>
+            <input type="file" id="patientDocFile" class="auth-input" accept="application/pdf,image/*" required />
+          </div>
+          <button type="submit" class="btn-auth-primary" style="width: 100%;" data-i18n="p_dash.btn_upload_sync">
+            Upload & Sync to Health Record ➔
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 3: Emergency SOS Confirmation -->
+    <div id="patientSosModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 480px; border-top: 5px solid #dc2626;">
+        <div class="modal-header">
+          <div class="modal-title" style="color: #991b1b;" data-i18n="dash.sos_modal_title">🚨 Emergency Dispatch Triggered</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('patientSosModal'))">✕</button>
+        </div>
+        <div style="padding: 1rem 0; font-size: 0.85rem; color: #334155; line-height: 1.5;">
+          <p><strong><span data-i18n="common.lbl_simulation">Simulation:</span></strong> <span data-i18n="p_dash.sim_alert_msg">108 Emergency Ambulance service has received an urgent maternal dispatch alert for:</span></p>
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 0.75rem; margin: 0.75rem 0;">
+            <div><strong data-i18n="common.lbl_patient">Patient:</strong> <span><span data-i18n="features.patient_sita">Sita Devi</span> (MMC-PT-108)</span></div>
+            <div><strong data-i18n="common.lbl_location">Location:</strong> <span data-i18n="dash.sos_location_label">House #42, Vadgaon Gaothan</span></div>
+            <div><strong><span data-i18n="common.lbl_frontline_contact">Frontline Contact:</span></strong> <span data-i18n="dash.sos_contact_label">ASHA Worker Sunita Tai (+91 98234 56789)</span></div>
+            <div><strong><span data-i18n="common.lbl_dest_facility">Destination Facility:</span></strong> <span data-i18n="dash.sos_dest_label">PHC ABC 24/7 Emergency Wing (2.5 km)</span></div>
+          </div>
+          <p style="color: #166534; font-weight: 700;"><span data-i18n="p_dash.sim_notified_msg">✓ ASHA Sunita Tai and PHC Emergency Ambulance have been notified.</span></p>
+        </div>
+        <button type="button" class="btn-auth-primary" style="background: #991b1b; width: 100%;" onclick="closeModal(document.getElementById('patientSosModal')); showToast('Emergency protocol activated.');" data-i18n="p_dash.btn_understood">
+          Understood / Close
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- Official Footer -->
+    <footer class="site-footer">
+      <div class="container footer-container">
+        <div class="footer-col footer-col-brand">
+          <div class="footer-brand-wrap">
+            <img src="assets/mmc_logo.png" alt="MMC Logo" class="footer-logo-img" />
+            <div>
+              <div class="footer-brand-title" data-i18n="brand.title">Maharashtra Medical Council, Mumbai</div>
+              <div class="footer-brand-sub" data-i18n="brand.subtitle">Swasthya Setu — Connect • Consult • Care</div>
+            </div>
+          </div>
+          <p class="footer-desc" data-i18n="p_dash.footer_desc">
+            Empowering rural Maharashtra citizens, frontline ASHA workers, and medical officers with an integrated continuity of care platform.
+          </p>
+        </div>
+        <div class="footer-col">
+          <div class="footer-heading" data-i18n="drawer.portal_switch">Role Dashboards</div>
+          <ul class="footer-links">
+            <li><a href="patient-dashboard.html" data-i18n="auth.role_patient">Patient Dashboard</a></li>
+            <li><a href="asha-dashboard.html" data-i18n="auth.role_asha">ASHA Worker Dashboard</a></li>
+            <li><a href="doctor-dashboard.html" data-i18n="auth.role_doctor">Doctor Dashboard</a></li>
+            <li><a href="login.html" data-i18n="topbar.switch_role">Role Switcher / Sign In</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-heading" data-i18n="footer.emergency_heading">Emergency Helplines</div>
+          <ul class="footer-links">
+            <li><a href="tel:108" data-i18n="footer.ambulance_108">Free Ambulance: 108</a></li>
+            <li><a href="tel:104" data-i18n="footer.women_104">Health Advice Helpline: 104</a></li>
+            <li><a href="tel:181" data-i18n="dash.women_helpline">Women Helpline: 181</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container footer-bottom-content">
+          <div data-i18n="footer.copyright">© 2026 Maharashtra Medical Council, Mumbai. Rural Healthcare Frontline Initiative (SIH 26 Prototype).</div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- App Logic Script -->
+    <script src="js/translations.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

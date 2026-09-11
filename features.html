@@ -1,0 +1,1151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="page_title.features">Features & Innovations — Maharashtra Medical Council, Mumbai</title>
+    <meta
+      name="description"
+      content="Explore core digital innovations of Maharashtra Medical Council: Slot Booking, Risk-Based Triage, Digital E-Referral, Medicine Availability, and Frontline Care Plans." />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/png" href="assets/mmc_logo.png" />
+  </head>
+  <body>
+    <!-- Top Utility Government Bar -->
+    <div class="gov-topbar">
+      <div class="container gov-topbar-content">
+        <div class="gov-topbar-left">
+          <span class="gov-badge">
+            <img
+              src="assets/mmc_logo.png"
+              alt="Govt Emblem"
+              class="gov-emblem-small" />
+            <span data-i18n="gov.title">Government of Maharashtra</span>
+          </span>
+          <span style="opacity: 0.4">|</span>
+          <a
+            href="mailto:contact@maharashtramedicalcouncil.org.in"
+            class="gov-contact-item">
+            ✉ contact@maharashtramedicalcouncil.org.in
+          </a>
+        </div>
+        <div class="gov-topbar-right">
+          <div class="accessibility-controls" title="Adjust Text Size" data-i18n-title="gov.font_adjust">
+            <button
+              id="fontDecBtn"
+              class="font-resize-btn"
+              aria-label="Decrease Font Size">
+              A-
+            </button>
+            <button
+              id="fontResetBtn"
+              class="font-resize-btn"
+              aria-label="Reset Font Size">
+              A
+            </button>
+            <button
+              id="fontIncBtn"
+              class="font-resize-btn"
+              aria-label="Increase Font Size">
+              A+
+            </button>
+          </div>
+          <div class="lang-select-wrapper">
+            <span class="lang-globe-icon" aria-hidden="true">🌐</span>
+            <select
+              id="langSelect"
+              class="lang-select"
+              aria-label="Select Language">
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+              <option value="mr">मराठी</option>
+            </select>
+          </div>
+          <div id="userSessionPill" class="gov-user-pill" style="display: none">
+            <span id="userSessionRoleIcon">👩‍⚕️</span>
+            <span id="userSessionName"><span data-i18n="common.default_user">User</span></span>
+          </div>
+          <button
+            id="logoutBtn"
+            class="gov-logout-btn"
+            title="Sign out of prototype">
+            <span>🚪</span> <span data-i18n="gov.logout">Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Official Main Navbar -->
+    <header class="site-navbar">
+      <div class="container navbar-container">
+        <a href="index.html" class="brand-link" id="navBrandLink">
+          <img
+            src="assets/mmc_logo.png"
+            alt="Maharashtra Medical Council Logo"
+            class="brand-logo-img" />
+          <div class="brand-text">
+            <span class="brand-title" data-i18n="brand.title">Maharashtra Medical Council, Mumbai</span>
+            <span class="brand-subtitle" data-i18n="brand.subtitle"
+              >Rural Healthcare Frontline Initiative</span
+            >
+          </div>
+        </a>
+
+        <nav class="desktop-nav">
+          <ul class="nav-menu">
+            <li>
+              <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
+            </li>
+            <li>
+              <a href="complaints.html" class="nav-link" data-i18n="nav.complaints">Complaints</a>
+            </li>
+            <li>
+              <a href="feedback.html" class="nav-link" data-i18n="nav.feedback">Feedback</a>
+            </li>
+            <li>
+              <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
+            </li>
+            <li>
+              <a href="login.html?tab=signup" class="nav-link" data-i18n="nav.signup">Sign Up</a>
+            </li>
+            <li>
+              <a href="login.html?tab=login" class="nav-link" data-i18n="nav.login">Login</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem">
+          <button
+            id="mobileNavToggle"
+            class="mobile-nav-toggle"
+            aria-label="Open Navigation Menu">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="mobile-nav-drawer">
+      <div class="drawer-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem">
+          <img
+            src="assets/mmc_logo.png"
+            alt="Logo"
+            style="width: 36px; height: 36px" />
+          <span
+            style="
+              font-weight: 800;
+              font-size: 0.85rem;
+              color: var(--color-primary-dark);
+            "
+            data-i18n="drawer.title"
+            >MMC Mumbai</span
+          >
+        </div>
+        <button
+          id="drawerCloseBtn"
+          style="font-size: 1.5rem; color: var(--color-slate-500)">
+          &times;
+        </button>
+      </div>
+
+      <div class="drawer-lang-section">
+        <label for="drawerLangSelect" class="drawer-lang-label" data-i18n="gov.lang_select">Language / भाषा :</label>
+        <div class="drawer-lang-wrapper">
+          <span class="lang-globe-icon" aria-hidden="true">🌐</span>
+          <select id="drawerLangSelect" class="drawer-lang-select" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+            <option value="mr">मराठी</option>
+          </select>
+        </div>
+      </div>
+
+      <ul class="drawer-links">
+        <li>
+          <a href="index.html" class="drawer-link" data-i18n="nav.home">Home</a>
+        </li>
+        <li>
+          <a href="complaints.html" class="drawer-link" data-i18n="nav.complaints">Complaints</a>
+        </li>
+        <li>
+          <a href="feedback.html" class="drawer-link" data-i18n="nav.feedback">Feedback</a>
+        </li>
+        <li>
+          <a href="about.html" class="drawer-link" data-i18n="nav.about">About</a>
+        </li>
+        <li>
+          <a href="login.html?tab=signin" class="drawer-link" data-i18n="nav.signin">Sign In</a>
+        </li>
+        <li>
+          <a href="login.html?tab=signup" class="drawer-link" data-i18n="nav.signup">Sign Up</a>
+        </li>
+        <li>
+          <a href="login.html?tab=login" class="drawer-link" data-i18n="nav.login">Login</a>
+        </li>
+        <li id="drawerLogoutWrap" style="display: none">
+          <a
+            href="#"
+            id="drawerLogoutBtn"
+            class="drawer-link drawer-logout-link">
+            <span>🚪</span> <span data-i18n="gov.logout">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+      <div
+        style="
+          margin-top: auto;
+          padding-top: 1.5rem;
+          border-top: 1px solid var(--color-slate-200);
+        ">
+        <p
+          style="
+            font-size: 0.75rem;
+            color: var(--color-slate-500);
+            text-align: center;
+          "
+          data-i18n="drawer.tagline">
+          Government of Maharashtra<br />Smart India Hackathon Prototype
+        </p>
+      </div>
+    </div>
+
+    <main>
+      <!-- Page Hero Banner -->
+      <section class="page-hero-banner">
+        <div class="container">
+          <div class="page-hero-content">
+            <div class="page-hero-badge">
+              <span>💡</span> <span data-i18n="features.hero_badge">Frontline Digital Innovations</span>
+            </div>
+            <h1 class="page-hero-title" data-i18n="features.hero_title">Core Features & Innovations</h1>
+            <p class="page-hero-subtitle" data-i18n="features.hero_subtitle">
+              Engineered around the daily challenges of rural patients and ASHA
+              community workers: confirmed slot booking, clinical risk triage,
+              trackable e-referrals, live drug inventory lookups, and structured
+              post-consultation care plans.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Notification Toast Container -->
+      <div id="toastNotification" class="toast-notification" role="alert">
+        <span id="toastIcon">🔔</span>
+        <span id="toastMessage" class="toast-text" data-i18n="common.notification_title">Notification</span>
+      </div>
+
+      <!-- Features Showcase -->
+      <section class="section">
+        <div class="container features-container">
+          <!-- Feature 1: Appointment & Slot Booking -->
+          <div id="appointments" class="feature-showcase-row">
+            <div class="feature-info">
+              <span class="feature-number-badge" data-i18n="feat.badge1">Feature 01 • Consultation Access</span>
+              <h2 class="feature-title" data-i18n="feat.title1">Appointment & Slot Booking</h2>
+              <p class="feature-desc" data-i18n="feat.desc1">
+                Eliminate unpredictable lines at Primary Health Centres.
+                Frontline workers can pre-book confirmed slots with local
+                Medical Officers or teleconsultation physicians.
+              </p>
+              <div class="feature-benefit-callout" data-i18n="feat.quote1">
+                “Appointment and slot visibility can help patients avoid
+                unnecessary waiting and help ASHA workers plan visits.”
+              </div>
+              <div style="display: flex; gap: 0.75rem">
+                <button
+                  class="btn-primary"
+                  onclick="document.getElementById('confirmApptBtn').click()" data-i18n="feat.btn_test1">
+                  Test Booking Flow
+                </button>
+              </div>
+            </div>
+
+            <div class="feature-interactive-card">
+              <div class="card-top-bar">
+                <span class="card-top-title"><span>📅</span> <span data-i18n="feat.card1_title">PHC Slot Booking</span></span>
+                <span class="card-top-tag" data-i18n="feat.simulation_badge">Interactive Simulation</span>
+              </div>
+              <div class="card-body-content">
+                <div class="patient-meta-box">
+                  <div class="patient-label-group">
+                    <span class="meta-label" data-i18n="feat.lbl_patient">Patient</span>
+                    <span class="meta-value" data-i18n="features.patient_sita">Sita Devi</span>
+                  </div>
+                  <div class="patient-label-group" style="text-align: right">
+                    <span class="meta-label" data-i18n="feat.lbl_assigned_doc">Assigned Medical Officer</span>
+                    <span class="doctor-badge" data-i18n="common.doc_clinic">Dr. Sharma (PHC ABC)</span>
+                  </div>
+                </div>
+
+                <!-- Slot Selection -->
+                <div class="slots-container">
+                  <span class="meta-label" data-i18n="feat.lbl_avail_slots">Available Slots for Today</span>
+                  <div class="slots-grid">
+                    <button class="slot-btn" data-slot="10:00 AM" data-i18n="features.slot_1000">10:00 AM</button>
+                    <button class="slot-btn selected" data-slot="10:30 AM">
+                      <span data-i18n="features.slot_1030">10:30 AM</span>
+                      <span style="font-size: 0.65rem; display: block; color: var(--color-gold-bright);" data-i18n="feat.selected_badge">SELECTED</span>
+                    </button>
+                    <button class="slot-btn" data-slot="11:00 AM" data-i18n="features.slot_1100">11:00 AM</button>
+                    <button class="slot-btn" data-slot="11:30 AM" data-i18n="features.slot_1130">11:30 AM</button>
+                  </div>
+                </div>
+
+                <!-- Consultation Type -->
+                <div style="margin-top: 1rem">
+                  <span class="meta-label" data-i18n="feat.lbl_consult_mode">Consultation Mode</span>
+                  <div class="consult-type-selector">
+                    <button class="consult-type-btn active" data-type="Video" data-i18n="feat.mode_video">
+                      📹 Video
+                    </button>
+                    <button class="consult-type-btn" data-type="Audio" data-i18n="feat.mode_audio">
+                      📞 Audio
+                    </button>
+                    <button class="consult-type-btn" data-type="In-person" data-i18n="feat.mode_inperson">
+                      🏥 In-Person
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  id="confirmApptBtn"
+                  class="btn-primary"
+                  style="
+                    width: 100%;
+                    justify-content: center;
+                    margin-top: 1.25rem;
+                  " data-i18n="feat.btn_confirm_appt">
+                  Confirm Appointment
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature 2: Risk-Based Earlier Consultation -->
+          <div class="feature-showcase-row reversed">
+            <div class="feature-info">
+              <span class="feature-number-badge" data-i18n="feat.badge2">Feature 02 • Intelligent Triage</span>
+              <h2 class="feature-title" data-i18n="feat.title2">Risk-Based Earlier Consultation</h2>
+              <p class="feature-desc" data-i18n="feat.desc2">
+                Clinical priority algorithms assess vital signs recorded by ASHA
+                workers to highlight urgent symptoms, accelerating clinical
+                attention for vulnerable cases like maternal hypertension.
+              </p>
+              <div class="feature-benefit-callout" data-i18n="feat.quote2">
+                “The system helps frontline workers identify patients who may
+                need earlier professional evaluation.”
+              </div>
+              <div
+                style="
+                  font-size: 0.8125rem;
+                  color: var(--color-slate-500);
+                  background: #f8fafc;
+                  padding: 0.6rem 0.85rem;
+                  border-radius: var(--radius-sm);
+                  border: 1px solid var(--color-slate-200);
+                ">
+                <strong data-i18n="feat.notice_title">Important Notice:</strong> <span data-i18n="feat.notice_desc">This protocol is designed strictly for risk screening and priority triage, not diagnostic decision-making.</span>
+              </div>
+            </div>
+
+            <div class="feature-interactive-card">
+              <div class="card-top-bar">
+                <span class="card-top-title"
+                  ><span>🩺</span> <span data-i18n="features.risk_title">Frontline Risk Screening</span></span
+                >
+                <span class="badge-status badge-red" style="font-size: 0.7rem">
+                  <span class="status-dot"></span> <span data-i18n="dash.high_priority">🔴 HIGH PRIORITY</span>
+                </span>
+              </div>
+              <div class="card-body-content">
+                <div class="patient-meta-box">
+                  <div class="patient-label-group">
+                    <span class="meta-label" data-i18n="feat.lbl_patient_rec">Patient Record</span>
+                    <span class="meta-value" data-i18n="common.name_sita">Sita Devi</span>
+                  </div>
+                  <div class="patient-label-group" style="text-align: right">
+                    <span class="meta-label" data-i18n="feat.lbl_profile_gest">Profile / Gestational</span>
+                    <span
+                      style="font-weight: 700; color: var(--color-slate-700)"
+                      ><span data-i18n="features.pat_demog">Age: 28 • Pregnant: Yes</span></span
+                    >
+                  </div>
+                </div>
+
+                <!-- Vitals & Symptoms -->
+                <div class="risk-vitals-row">
+                  <div class="vital-item">
+                    <span class="vital-label" data-i18n="features.symptoms_label">Symptoms</span>
+                    <span
+                      class="vital-value"
+                      style="font-size: 0.85rem; color: #991b1b"
+                       data-i18n="feat.sym_headache">✓ Severe headache</span
+                    >
+                  </div>
+                  <div class="vital-item">
+                    <span class="vital-label" data-i18n="features.bp_label">Blood Pressure</span>
+                    <span class="vital-value vital-danger" data-i18n="feat.vitals_danger">150/100 mmHg</span>
+                  </div>
+                  <div class="vital-item">
+                    <span class="vital-label" data-i18n="features.pulse_spo2">Pulse / SpO2</span>
+                    <span class="vital-value" data-i18n="feat.vitals_stats">88 bpm • 98%</span>
+                  </div>
+                </div>
+
+                <!-- High Priority Callout -->
+                <div class="risk-alert-banner">
+                  <span class="risk-alert-icon">⚠️</span>
+                  <div>
+                    <h4 class="risk-alert-title" data-i18n="features.priority_recom">
+                      Priority Medical Consultation Recommended
+                    </h4>
+                    <p style="font-size: 0.8rem; color: #64748b; margin: 0 0 0.75rem 0;" data-i18n="features.bp_warn">Elevated blood pressure in pregnancy warrants expedited physician evaluation within 30 minutes.</p>
+                  </div>
+                </div>
+
+                <!-- Earliest Options -->
+                <div class="earliest-options-box">
+                  <div class="options-title" data-i18n="feat.opt_tele_title">
+                    Earliest Available Care Options
+                  </div>
+                  <div class="option-row">
+                    <span class="option-name"
+                       data-i18n="feat.opt_tele_sanjeevani">📞 Teleconsultation (e-Sanjeevani)</span
+                    >
+                    <span class="option-time" data-i18n="feat.opt_tele_time">Available in 12 minutes</span>
+                  </div>
+                  <div class="option-row">
+                    <span class="option-name" data-i18n="feat.opt_fasttrack">🏥 PHC ABC Fast-Track Slot</span>
+                    <span class="option-time" data-i18n="feat.opt_fasttrack_time">Available in 25 minutes</span>
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 0.75rem;
+                  ">
+                  <button
+                    id="riskConsultNowBtn"
+                    class="btn-primary"
+                    style="justify-content: center; padding: 0.65rem 0.5rem" data-i18n="dash.btn_consult">
+                    Consult Now
+                  </button>
+                  <button
+                    id="riskViewOptionsBtn"
+                    class="btn-secondary"
+                    style="justify-content: center; padding: 0.65rem 0.5rem" data-i18n="features.view_options">
+                    View Options
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature 3: E-Referral and <span data-i18n="features.lbl_ref_id">Referral ID</span> -->
+          <div class="feature-showcase-row">
+            <div class="feature-info">
+              <span class="feature-number-badge"
+                 data-i18n="feat.badge3">Feature 03 • Seamless Continuity</span
+              >
+              <h2 class="feature-title" data-i18n="feat.title3">E-Referral & Referral ID</h2>
+              <p class="feature-desc" data-i18n="feat.desc3">
+                Prevent drop-offs when moving from rural sub-centres to specialty hospitals. Every referral is secured with a persistent ID and QR token that tracks the patient until final specialist review.
+              </p>
+              <div style="font-style: italic; color: #1e293b; font-size: 0.95rem; margin-bottom: 0.5rem;" data-i18n="features.quote_referral">“The referral remains trackable instead of ending when the patient leaves the PHC.”</div>
+              <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;" data-i18n="features.stepper_desc">Click the interactive buttons below to test the status transition as Sita Devi progresses from dispatch to arrival and specialist sign-off.</p>
+            </div>
+
+            <div class="feature-interactive-card">
+              <div class="card-top-bar">
+                <span class="card-top-title"
+                  ><span>🔄</span> Digital E-Referral</span
+                >
+                <span
+                  id="referralStatusBadge"
+                  class="badge-status badge-yellow">
+                  <span class="status-dot"></span> <span data-i18n="features.ref_status">🟡 Referred</span>
+                </span>
+              </div>
+              <div class="card-body-content">
+                <div class="patient-meta-box">
+                  <div class="patient-label-group">
+                    <span class="meta-label" data-i18n="asha_dash.modal_ref_patient">Patient</span>
+                    <span class="meta-value">Sita Devi</span>
+                  </div>
+                  <div class="patient-label-group" style="text-align: right">
+                    <span class="meta-label">Referral ID</span>
+                    <span class="referral-id-tag">REF-1024</span>
+                  </div>
+                </div>
+
+                <!-- Route -->
+                <div class="referral-route-box">
+                  <div class="facility-node">
+                    <span class="facility-type" data-i18n="features.from_label">From</span>
+                    <span class="facility-name">PHC ABC</span>
+                  </div>
+                  <span class="route-arrow">➔</span>
+                  <div class="facility-node" style="text-align: right">
+                    <span class="facility-type" data-i18n="features.dest_label">Destination</span>
+                    <span class="facility-name">Rural Hospital</span>
+                  </div>
+                </div>
+
+                <!-- Reason & Priority -->
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1rem;
+                    font-size: 0.85rem;
+                  ">
+                  <span><strong data-i18n="p_dash.reason_lbl">Reason:</strong> <span data-i18n="features.lbl_high_risk_preg">High-risk pregnancy</span></span>
+                  <span class="badge-status badge-red" style="font-size: 0.7rem"
+                     data-i18n="feat.badge_priority_red">🔴 Priority</span
+                  >
+                </div>
+
+                <!-- Dynamic Status Tracker -->
+                <div class="status-tracker-rail">
+                  <div
+                    id="referralProgressLine"
+                    class="status-track-progress"
+                    style="width: 0%"></div>
+                  <div id="refNodeReferred" class="status-step-node completed">
+                    <div class="step-node-bubble">✓</div>
+                    <span class="step-node-label" data-i18n="feat.step_referred">Referred</span>
+                  </div>
+                  <div id="refNodeArrived" class="status-step-node">
+                    <div class="step-node-bubble">2</div>
+                    <span class="step-node-label" data-i18n="feat.step_arrived">Arrived</span>
+                  </div>
+                  <div id="refNodeConsulted" class="status-step-node">
+                    <div class="step-node-bubble">3</div>
+                    <span class="step-node-label" data-i18n="feat.step_consulted">Consulted</span>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1.2fr 0.8fr;
+                    gap: 0.75rem;
+                  ">
+                  <button
+                    id="updateReferralStatusBtn"
+                    class="btn-primary"
+                    style="justify-content: center; font-size: 0.85rem" data-i18n="features.btn_mark_arrived">
+                    Mark as Arrived (Demonstration)
+                  </button>
+                  <button
+                    id="trackReferralBtn"
+                    class="btn-secondary"
+                    style="justify-content: center; font-size: 0.85rem" data-i18n="features.btn_track_status">
+                    Track Status
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature 4: Care Plan & Follow-Up -->
+          <div class="feature-showcase-row reversed">
+            <div class="feature-info">
+              <span class="feature-number-badge"
+                 data-i18n="feat.badge4">Feature 04 • Frontline Retention</span
+              >
+              <h2 class="feature-title" data-i18n="feat.title4">Care Plan & Follow-Up</h2>
+              <p class="feature-desc" data-i18n="feat.desc4">
+                Healthcare doesn't stop after the doctor's visit. Actionable care plans automatically generate scheduled reminders for ASHA workers to monitor recovery, medication adherence, and follow-up tests.
+              </p>
+              <div class="feature-benefit-callout" data-i18n="feat.quote4">
+                “Care plans and reminders help ASHA workers track which patients need follow-up and when.”
+              </div>
+              <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;" data-i18n="features.flw_test_desc">Test marking Sita Devi's upcoming ANC follow-up as completed in the demonstration card below:</p>
+            </div>
+
+            <div class="feature-interactive-card">
+              <div class="card-top-bar">
+                <span class="card-top-title"
+                  ><span>📝</span> <span data-i18n="features.careplan_title">Active Care Plan</span></span
+                >
+                <span
+                  id="carePlanStatusBadge"
+                  class="badge-status badge-yellow">
+                  <span class="status-dot"></span> <span data-i18n="features.upcoming_badge">🟡 Upcoming</span>
+                </span>
+              </div>
+              <div class="card-body-content">
+                <!-- Category Filter Pills -->
+                <div class="category-pills-row">
+                  <button class="cat-pill active" data-cat="Maternal Care" data-i18n="features.tab_maternal">
+                    🤰 Maternal Care
+                  </button>
+                  <button class="cat-pill" data-cat="Child Care" data-i18n="features.tab_child">
+                    👶 Child Care
+                  </button>
+                  <button class="cat-pill" data-cat="Diabetes" data-i18n="features.tab_diabetes">
+                    🩺 Diabetes
+                  </button>
+                  <button class="cat-pill" data-cat="Hypertension" data-i18n="features.tab_hypertension">
+                    🩺 Hypertension
+                  </button>
+                  <button class="cat-pill" data-cat="TB Care" data-i18n="features.tab_tb">
+                    🦠 TB Care
+                  </button>
+                </div>
+
+                <div class="patient-meta-box">
+                  <div class="patient-label-group">
+                    <span class="meta-label">Patient</span>
+                    <span class="meta-value">Sita Devi</span>
+                  </div>
+                  <div class="patient-label-group" style="text-align: right">
+                    <span class="meta-label"><span data-i18n="features.cat_protocol">Category / Protocol</span></span>
+                    <span
+                      style="font-weight: 700; color: var(--color-primary-main)"
+                       data-i18n="feat.category_anc">Maternal Care (ANC)</span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 0.75rem;
+                    margin-bottom: 1.25rem;
+                    font-size: 0.85rem;
+                    background: var(--color-slate-50);
+                    padding: 0.75rem;
+                    border-radius: var(--radius-md);
+                  ">
+                  <div>
+                    <span class="meta-label" data-i18n="features.next_visit">Next Scheduled Visit</span>
+                    <div
+                      style="font-weight: 800; color: var(--color-slate-800)" data-i18n="feat.date_15_sep">
+                      15 September
+                    </div>
+                  </div>
+                  <div>
+                    <span class="meta-label" data-i18n="features.purpose_label">Purpose</span>
+                    <div
+                      style="font-weight: 700; color: var(--color-slate-800)" data-i18n="feat.anc_flw_check">
+                      ANC Follow-up & BP Check
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ASHA Reminder Alert -->
+                <div id="dueReminderCard" class="asha-reminder-card">
+                  <span class="reminder-bell-icon">🔔</span>
+                  <div>
+                    <div
+                      style="
+                        font-size: 0.8rem;
+                        font-weight: 800;
+                        color: #92400e;
+                        text-transform: uppercase;
+                      " data-i18n="feat.followup_due_badge">
+                      FOLLOW-UP DUE
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.9rem;
+                        font-weight: 700;
+                        color: var(--color-slate-900);
+                      " data-i18n="feat.sita_anc_flw">
+                      Sita Devi — ANC Follow-up
+                    </div>
+                    <div style="font-size: 0.75rem; color: #b45309" data-i18n="feat.followup_due_text">
+                      Due in 3 days (15 September)
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 0.75rem;
+                  ">
+                  <button
+                    id="markFollowupCompletedBtn"
+                    class="btn-primary"
+                    style="justify-content: center" data-i18n="features.btn_mark_done">
+                    Mark Completed
+                  </button>
+                  <button
+                    id="rescheduleFollowupBtn"
+                    class="btn-secondary"
+                    style="justify-content: center" data-i18n="asha_dash.btn_reschedule">
+                    Reschedule
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature 5: Medicine and Diagnostic Availability -->
+          <div class="feature-showcase-row">
+            <div class="feature-info">
+              <span class="feature-number-badge"
+                 data-i18n="feat.badge5">Feature 05 • Zero-Wasted-Trips</span
+              >
+              <h2 class="feature-title" data-i18n="feat.title5">Medicine & Diagnostic Availability</h2>
+              <p class="feature-desc" data-i18n="feat.desc5">
+                Rural patients frequently travel hours only to find stockouts. This feature provides ASHA workers with real-time visibility into drug inventories and diagnostic test capabilities at neighboring health centers.
+              </p>
+              <div style="font-style: italic; color: #1e293b; font-size: 0.95rem; margin-bottom: 0.5rem;" data-i18n="features.quote_travel">“ASHA workers can identify where medicines or tests are available before sending the patient, helping reduce unnecessary travel.”</div>
+              <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;" data-i18n="features.drug_search_desc">Search any essential drug or tap a pre-filled item to inspect live facility stock:</p>
+            </div>
+
+            <div class="feature-interactive-card">
+              <div class="card-top-bar">
+                <span class="card-top-title"
+                  ><span>💊</span> <span data-i18n="features.facility_inv_title">Facility Inventory Locator</span></span
+                >
+                <span class="card-top-tag" data-i18n="features.live_network">Live Network</span>
+              </div>
+              <div class="card-body-content">
+                <!-- Search Bar -->
+                <div class="med-search-input-group">
+                  <span>🔍</span>
+                  <input
+                    type="text"
+                    id="medSearchInput"
+                    class="med-search-input"
+                    value="Paracetamol"
+                    placeholder="Search medicine (e.g. Paracetamol, Amoxicillin)..." />
+                </div>
+
+                <!-- Quick Filter Pills -->
+                <div class="med-pills-row">
+                  <button class="med-quick-pill active" data-med="Paracetamol" data-i18n="feat.med_para">
+                    Paracetamol
+                  </button>
+                  <button class="med-quick-pill" data-med="Amoxicillin" data-i18n="feat.med_amox">
+                    Amoxicillin
+                  </button>
+                  <button class="med-quick-pill" data-med="ORS" data-i18n="feat.med_ors">
+                    ORS Sachet
+                  </button>
+                  <button class="med-quick-pill" data-med="Iron" data-i18n="feat.med_ifa">
+                    Iron & Folic Acid
+                  </button>
+                </div>
+
+                <!-- Dynamic Inventory Results -->
+                <div id="medInventoryList" class="inventory-list"></div>
+
+                <!-- Diagnostic Availability Table -->
+                <div
+                  style="
+                    border-top: 1px solid var(--color-slate-200);
+                    padding-top: 1rem;
+                  ">
+                  <span class="meta-label"
+                     data-i18n="feat.lab_cap_title">Diagnostic Laboratory Capability</span
+                  >
+                  <table class="diag-table">
+                    <thead>
+                      <tr>
+                        <th data-i18n="feat.th_test_name">Test Name</th>
+                        <th>PHC ABC</th>
+                        <th>Rural Hospital</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong data-i18n="feat.test_cbc">Blood Test (CBC / Hb)</strong></td>
+                        <td>
+                          <span
+                            style="color: var(--status-red); font-weight: 700"
+                             data-i18n="feat.not_avail">❌ Not Available</span
+                          >
+                        </td>
+                        <td>
+                          <span
+                            style="color: var(--status-green); font-weight: 700"
+                             data-i18n="feat.avail">✅ Available</span
+                          >
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><strong data-i18n="feat.test_urine">Urine Albumin Test</strong></td>
+                        <td>
+                          <span
+                            style="color: var(--status-green); font-weight: 700"
+                            >✅ Available</span
+                          >
+                        </td>
+                        <td>
+                          <span
+                            style="color: var(--status-green); font-weight: 700"
+                            >✅ Available</span
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Interactive Demonstration Modals -->
+    <div id="apptSuccessModal" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title" data-i18n="feat.modal_appt_title">Appointment Confirmed</h3>
+          <button class="modal-close-btn modal-close-trigger">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-confirm-icon">✓</div>
+          <h4 class="modal-confirm-title">Appointment Confirmed</h4>
+          <div id="apptModalDetail" class="modal-confirm-detail">
+            10:30 AM — Dr. Sharma
+          </div>
+          <div style="font-size: 0.8rem; color: #64748b; margin-top: 0.25rem;" data-i18n="features.demo_token_notice">Demonstration only — confirmed token generated for rural clinic.</div>
+          <button
+            class="btn-primary modal-close-trigger"
+            style="width: 100%; justify-content: center" data-i18n="features.btn_done">
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="teleconsultModal" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title" data-i18n="feat.modal_tele_title">Teleconsultation Triage</h3>
+          <button class="modal-close-btn modal-close-trigger">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div
+            class="modal-confirm-icon"
+            style="
+              background: var(--status-blue-bg);
+              color: var(--status-blue);
+              border-color: var(--status-blue-border);
+            ">
+            📞
+          </div>
+          <h4 class="modal-confirm-title" data-i18n="feat.tele_connected">
+            e-Sanjeevani Teleconsult Connected
+          </h4>
+          <div class="modal-confirm-detail" style="color: var(--status-blue)" data-i18n="feat.tele_queue">
+            Queue Position: #1 • ETA 12 Mins
+          </div>
+          <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;" data-i18n="features.demo_proto_notice">Demonstration prototype — Risk screening and prioritization, NOT medical diagnosis.</div>
+          <button
+            class="btn-primary modal-close-trigger"
+            style="width: 100%; justify-content: center" data-i18n="feat.btn_return_screening">
+            Return to Screening
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="referralDetailModal" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title" data-i18n="feat.modal_ref_title">Referral Tracking Token: REF-1024</h3>
+          <button class="modal-close-btn modal-close-trigger">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div
+            style="
+              background: var(--color-slate-50);
+              border: 1px solid var(--color-slate-200);
+              border-radius: var(--radius-md);
+              padding: 1rem;
+              margin-bottom: 1rem;
+              font-size: 0.85rem;
+            ">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0.5rem;
+              ">
+              <span class="meta-label">Patient:</span>
+              <span style="font-weight: 700"
+                 data-i18n="feat.sita_gravida">Sita Devi (28 yrs, Gravida 2)</span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0.5rem;
+              ">
+              <span class="meta-label" data-i18n="feat.origin_phc_lbl">Origin PHC:</span>
+              <span style="font-weight: 700" data-i18n="feat.origin_phc_val">PHC ABC (Dr. Sharma)</span>
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0.5rem;
+              ">
+              <span class="meta-label" data-i18n="feat.target_fac_lbl">Target Facility:</span>
+              <span style="font-weight: 700"
+                 data-i18n="feat.rural_hosp_obs">Rural Hospital (Obstetrics Unit)</span
+              >
+            </div>
+            <div style="display: flex; justify-content: space-between">
+              <span class="meta-label" data-i18n="feat.initial_vitals_lbl">Initial Vitals:</span>
+              <span style="font-weight: 700; color: var(--status-red)"
+                 data-i18n="feat.vitals_headache_note">BP 150/100 • Headache</span
+              >
+            </div>
+          </div>
+          <div class="demo-only-callout">
+            “The referral remains trackable instead of ending when the patient
+            leaves the PHC.”
+          </div>
+          <button
+            class="btn-primary modal-close-trigger"
+            style="width: 100%; justify-content: center" data-i18n="feat.btn_close_tracker">
+            Close Tracker
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="facilityDetailModal" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 id="facilityModalName" class="modal-title" data-i18n="feat.modal_fac_title">
+            Facility Information
+          </h3>
+          <button class="modal-close-btn modal-close-trigger">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;" data-i18n="features.verified_network">Verified inventory and services under Maharashtra Medical Council pilot district network.</p>
+          <div
+            style="
+              background: var(--color-slate-50);
+              padding: 1rem;
+              border-radius: var(--radius-md);
+              font-size: 0.85rem;
+              line-height: 1.8;
+              margin-bottom: 1.25rem;
+            ">
+            <div>📍 <strong data-i18n="feat.block_lbl">Block:</strong> <span data-i18n="features.vadgaon_circle">Vadgaon Health Circle</span></div>
+            <div>
+              🕒 <strong data-i18n="feat.opd_timings_lbl">OPD Timings:</strong> <span data-i18n="features.circle_hours">8:00 AM – 2:00 PM (Emergency
+              24/7)</span>
+            </div>
+            <div>
+              👨‍⚕️ <strong data-i18n="feat.duty_officer_lbl">Duty Officer:</strong> <span data-i18n="features.circle_doctors">Dr. Sharma / Dr. Kulkarni</span>
+            </div>
+            <div>
+              🧪 <strong data-i18n="feat.diag_lbl">Diagnostics:</strong> <span data-i18n="features.circle_tests">CBC, Blood Sugar, Albumin Strip,
+              Malaria RDT</span>
+            </div>
+          </div>
+          <div class="demo-only-callout">
+            “ASHA workers can identify where medicines or tests are available
+            before sending the patient, helping reduce unnecessary travel.”
+          </div>
+          <button
+            class="btn-primary modal-close-trigger"
+            style="width: 100%; justify-content: center" data-i18n="features.btn_close">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Official Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top-grid">
+          <div class="footer-brand-col">
+            <div class="footer-brand-identity">
+              <img
+                src="assets/mmc_logo.png"
+                alt="Maharashtra Medical Council Emblem"
+                class="footer-emblem-img" />
+              <div class="footer-brand-text">
+                <h3 data-i18n="brand.title">Maharashtra Medical Council, Mumbai</h3>
+                <p data-i18n="footer.gov_maha">Government of Maharashtra</p>
+              </div>
+            </div>
+            <p class="footer-org-desc" data-i18n="footer.desc">
+              Working towards accessible, connected and better healthcare for
+              communities across Maharashtra.
+            </p>
+            <div class="gov-badge-seal">
+              <span>🏛️</span>
+              <span data-i18n="footer.statutory_body">Statutory Body Created by State Legislature</span>
+            </div>
+          </div>
+
+          <div class="footer-contact-col">
+            <h4 class="footer-col-title" data-i18n="footer.contact_us">Contact Us</h4>
+            <ul class="footer-contact-list">
+              <li class="footer-contact-item">
+                <span class="footer-contact-icon">📍</span>
+                <span
+                   data-i18n="common.office_address">189 - A, Anand Complex, First Floor, Sane Guruji Marg, Arthur
+                  Road Naka, Chinchpokali(W), MUMBAI - 400011.</span
+                >
+              </li>
+              <li class="footer-contact-item">
+                <span class="footer-contact-icon">✉</span>
+                <a href="mailto:contact@maharashtramedicalcouncil.org.in" class="footer-contact-link" data-i18n="common.contact_email">contact@maharashtramedicalcouncil.org.in</a>
+              </li>
+              <li class="footer-contact-item">
+                <span class="footer-contact-icon">📞</span>
+                <a href="tel:02048556211" class="footer-contact-link" data-i18n="common.phone">020 48556211</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-follow-col">
+            <h4 class="footer-col-title" data-i18n="footer.follow_us">Follow Us</h4>
+            <div class="footer-social-grid">
+              <a
+                href="https://www.facebook.com/people/Maharashtra-Medical-Council/61576475698311/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-circle-btn"
+                aria-label="Facebook">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+              </a>
+              <a
+                href="https://x.com/MMC_Maharashtra"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-circle-btn"
+                aria-label="Twitter X">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.instagram.com/maharashtramedicalcouncil"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-circle-btn"
+                aria-label="Instagram">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+              </a>
+              <a
+                href="http://www.youtube.com/@MaharashtraMedicalCouncil_MMC"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-circle-btn"
+                aria-label="YouTube">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+              </a>
+              <a
+                href="https://api.whatsapp.com/send/?phone=9152722353&text=Hi&type=phone_number&app_absent=0"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-circle-btn"
+                aria-label="WhatsApp"
+                style="
+                  background: rgba(37, 211, 102, 0.2);
+                  border-color: #25d366;
+                ">
+                <svg width="18" height="18" fill="#25d366" viewBox="0 0 24 24">
+                  <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                </svg>
+              </a>
+            </div>
+
+            <div class="official-stamp-row">
+              <span class="gov-digital-india">
+                <span>🇮🇳</span> <span data-i18n="common.digital_india">Digital India Partner</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-tagline-strip">
+          <h2 class="footer-tagline-text" data-i18n="footer.tagline">“CareKaro, Maharashtra!”</h2>
+        </div>
+
+        <div class="footer-bottom-bar">
+          <div data-i18n="footer.copyright">
+            © 2026 Maharashtra Medical Council, Mumbai. All Rights Reserved.
+          </div>
+          <div class="footer-bottom-links">
+            <a href="about.html" target="_blank" class="footer-bottom-link" data-i18n="footer.terms"
+              >Terms & Conditions</a
+            >
+            <span style="opacity: 0.3">|</span>
+            <a href="about.html" target="_blank" class="footer-bottom-link" data-i18n="footer.privacy"
+              >Disclaimer & Privacy</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/translations.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

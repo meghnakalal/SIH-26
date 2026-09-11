@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=login.html" />
+    <title>Redirecting to Healthcare Dashboard...</title>
+    <script>
+      (function() {
+        const sessionRole = localStorage.getItem('userRole') || sessionStorage.getItem('userRole') || sessionStorage.getItem('mmc_user_role') || localStorage.getItem('mmc_user_role') || 'asha';
+        if (sessionRole === 'doctor') {
+          window.location.replace('doctor-dashboard.html');
+        } else if (sessionRole === 'asha') {
+          window.location.replace('asha-dashboard.html');
+        } else if (sessionRole === 'patient') {
+          window.location.replace('patient-dashboard.html');
+        } else {
+          window.location.replace('login.html');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to Maharashtra Medical Council Healthcare Portal... <a href="login.html">Click here</a></p>
+  </body>
+</html>

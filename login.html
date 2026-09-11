@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="page_title.login">Sign In / Register — Maharashtra Medical Council, Mumbai</title>
+    <meta
+      name="description"
+      content="Official authentication portal for Maharashtra Medical Council Rural Healthcare Frontline Initiative." />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/png" href="assets/mmc_logo.png" />
+  </head>
+  <body class="auth-page-wrapper">
+    <!-- Top Utility Government Bar -->
+    <div class="gov-topbar">
+      <div class="container gov-topbar-content">
+        <div class="gov-topbar-left">
+          <span class="gov-badge">
+            <img
+              src="assets/mmc_logo.png"
+              alt="Govt Emblem"
+              class="gov-emblem-small" />
+            <span data-i18n="gov.title">Government of Maharashtra</span>
+          </span>
+          <span style="opacity: 0.4">|</span>
+          <a
+            href="mailto:contact@maharashtramedicalcouncil.org.in"
+            class="gov-contact-item" data-i18n="common.contact_email">
+            ✉ contact@maharashtramedicalcouncil.org.in
+          </a>
+        </div>
+        <div class="gov-topbar-right">
+          <div class="accessibility-controls" title="Adjust Text Size" data-i18n-title="gov.font_adjust">
+            <button
+              id="fontDecBtn"
+              class="font-resize-btn"
+              aria-label="Decrease Font Size">
+              A-
+            </button>
+            <button
+              id="fontResetBtn"
+              class="font-resize-btn"
+              aria-label="Reset Font Size">
+              A
+            </button>
+            <button
+              id="fontIncBtn"
+              class="font-resize-btn"
+              aria-label="Increase Font Size">
+              A+
+            </button>
+          </div>
+          <div class="lang-select-wrapper">
+            <span class="lang-globe-icon" aria-hidden="true">🌐</span>
+            <select
+              id="langSelect"
+              class="lang-select"
+              aria-label="Select Language">
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+              <option value="mr">मराठी</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Authentication Container -->
+    <main class="auth-main-container">
+      <!-- MMC Branding Header -->
+      <a
+        href="index.html"
+        class="auth-header-link"
+        style="text-decoration: none; color: inherit; display: block">
+        <div class="auth-header">
+          <div class="auth-logo-badge">
+            <img
+              src="assets/mmc_logo.png"
+              alt="Maharashtra Medical Council Seal"
+              class="auth-logo-img" />
+          </div>
+          <h1 class="auth-title" data-i18n="brand.title">Maharashtra Medical Council, Mumbai</h1>
+          <p class="auth-subtitle" data-i18n="brand.subtitle">Rural Healthcare Frontline Initiative</p>
+          <div class="auth-security-pill">
+            <span>🔒</span> <span data-i18n="auth.gateway">Authorized Gateway • Frontline Access Portal</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Centered Authentication Card -->
+      <div class="auth-card">
+        <!-- Active Session Detected Banner (if already logged in) -->
+        <div
+          id="activeSessionBanner"
+          class="auth-active-session-banner"
+          style="display: none">
+          <div>
+            <strong data-i18n="gov.active_session">Active Session:</strong> <span data-i18n="gov.logged_in_as">Logged in as</span>
+            <span id="activeUserName" data-i18n="common.default_user">User</span> (<span id="activeUserRole"
+               data-i18n="topbar.role_label">Role</span
+            >)
+          </div>
+          <button
+            type="button"
+            id="resumeSessionBtn"
+            class="auth-active-session-btn"
+            data-i18n="auth.continue_session">
+            Continue to Website ➔
+          </button>
+        </div>
+
+        <!-- Card Tabs: Sign In / Create Account -->
+        <div class="auth-tab-bar" role="tablist">
+          <button
+            type="button"
+            id="tabSignInBtn"
+            class="auth-tab-btn active"
+            role="tab"
+            aria-selected="true">
+            <span>🔑</span> <span data-i18n="auth.tab_signin">Sign In</span>
+          </button>
+          <button
+            type="button"
+            id="tabSignUpBtn"
+            class="auth-tab-btn"
+            role="tab"
+            aria-selected="false">
+            <span>📝</span> <span data-i18n="auth.tab_signup">Create an Account</span>
+          </button>
+        </div>
+
+        <!-- ==================================================================
+             PANEL 1: SIGN IN FORM
+             ================================================================== -->
+        <div id="signInPanel" class="auth-panel-view">
+          <!-- 3-Role Selection Option (Requirement 1 & 7) -->
+          <div class="auth-role-select-box">
+            <div class="auth-role-header">
+              <div class="auth-role-title">
+                <span>🩺</span> <span data-i18n="auth.role_header">Select Your Healthcare Role</span>
+              </div>
+              <span class="auth-role-badge-tag" data-i18n="auth.role_frontline_tag">Frontline System</span>
+            </div>
+
+            <div class="auth-role-grid" id="loginRoleGrid">
+              <!-- Role 1: Patient -->
+              <div
+                class="auth-role-card"
+                data-role-key="patient"
+                data-demo-name="Sita Devi"
+                data-demo-email="sita.devi@citizen.health.gov.in"
+                data-demo-reg="MMC-PT-108"
+                data-role-display="Patient"
+                data-dest="patient-dashboard.html">
+                <div class="auth-role-icon">👤</div>
+                <div class="auth-role-name" data-i18n="auth.role_patient">Patient</div>
+                <div class="auth-role-persona" data-i18n="auth.role_patient_sub">
+                  Sita Devi • Vadgaon Village (Citizen Access)
+                </div>
+                <span class="auth-role-dest" data-i18n="auth.role_dest_patient">Citizen Patient Portal</span>
+              </div>
+
+              <!-- Role 2: ASHA Worker -->
+              <div
+                class="auth-role-card selected"
+                data-role-key="asha"
+                data-demo-name="Sunita Tai"
+                data-demo-email="sunita.asha@health.gov.in"
+                data-demo-reg="ASHA-MH-409"
+                data-role-display="ASHA Worker"
+                data-dest="asha-dashboard.html">
+                <div class="auth-role-icon">👩‍⚕️</div>
+                <div class="auth-role-name" data-i18n="auth.role_asha">ASHA Worker</div>
+                <div class="auth-role-persona" data-i18n="auth.role_asha_sub">
+                  Sunita Tai • Sub-Centre Field Operations
+                </div>
+                <span class="auth-role-dest" data-i18n="auth.role_dest_asha">ASHA Frontline Field Portal</span>
+              </div>
+
+              <!-- Role 3: Doctor -->
+              <div
+                class="auth-role-card"
+                data-role-key="doctor"
+                data-demo-name="Dr. Sharma"
+                data-demo-email="dr.sharma@phc.org"
+                data-demo-reg="MMC-2018-0924"
+                data-role-display="Doctor"
+                data-dest="doctor-dashboard.html">
+                <div class="auth-role-icon">🩺</div>
+                <div class="auth-role-name" data-i18n="auth.role_doctor">Doctor</div>
+                <div class="auth-role-persona" data-i18n="auth.role_doctor_sub">
+                  Dr. Sharma • PHC ABC Medical Officer
+                </div>
+                <span class="auth-role-dest" data-i18n="auth.role_dest_doctor">Medical Officer Clinical Portal</span>
+              </div>
+            </div>
+          </div>
+
+          <form id="signInForm" autocomplete="on">
+            <!-- Email -->
+            <div class="auth-form-group">
+              <label for="signInEmail" class="auth-label" data-i18n="auth.email"
+                >Email Address *</label
+              >
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">✉</span>
+                <input
+                  type="email"
+                  id="signInEmail"
+                  class="auth-input"
+                  placeholder="e.g. asha.vadgaon@health.gov.in"
+                  data-i18n-placeholder="auth.email_ph"
+                  required />
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="auth-form-group">
+              <label for="signInPassword" class="auth-label" data-i18n="auth.password">Password *</label>
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">🔒</span>
+                <input
+                  type="password"
+                  id="signInPassword"
+                  class="auth-input"
+                  placeholder="••••••••"
+                  data-i18n-placeholder="auth.password_ph"
+                  required />
+                <button
+                  type="button"
+                  id="toggleSignInPwd"
+                  class="auth-pwd-toggle"
+                  title="Show/Hide Password">
+                  👁
+                </button>
+              </div>
+            </div>
+
+            <!-- Permanent Registration Number (Optional) -->
+            <div class="auth-form-group">
+              <label for="signInRegNo" class="auth-label" data-i18n="auth.reg_no">
+                Permanent Registration Number
+                <span class="optional-text" data-i18n="auth.reg_no_optional">(Optional)</span>
+              </label>
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">🪪</span>
+                <input
+                  type="text"
+                  id="signInRegNo"
+                  class="auth-input"
+                  placeholder="e.g. MMC-2024-XXXXX or ASHA ID"
+                  data-i18n-placeholder="auth.reg_no_ph" />
+              </div>
+            </div>
+
+            <!-- Sign In Submit Button -->
+            <button type="submit" id="signInSubmitBtn" class="btn-auth-primary">
+              <span data-i18n="auth.signin_btn">Sign In</span>
+              <span>➔</span>
+            </button>
+
+            <!-- Actions Row: Forgot Password -->
+            <div class="auth-actions-row">
+              <span></span>
+              <button
+                type="button"
+                id="forgotPasswordTrigger"
+                class="auth-text-btn"
+                data-i18n="auth.forgot_pwd">
+                Forgot Password?
+              </button>
+            </div>
+
+            <!-- Switch to Sign Up -->
+            <div class="auth-divider">
+              <span data-i18n="auth.or">OR</span>
+            </div>
+
+            <div class="auth-switch-footer">
+              <span data-i18n="auth.no_account">Don't have an account?</span>
+              <button type="button" id="switchToSignUpBtn" data-i18n="auth.create_account_btn">
+                Create an Account
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ==================================================================
+             PANEL 2: SIGN UP / REGISTER FORM
+             ================================================================== -->
+        <div id="signUpPanel" class="auth-panel-view" style="display: none">
+          <form id="signUpForm" autocomplete="on">
+            <!-- Full Name -->
+            <div class="auth-form-group">
+              <label for="signUpName" class="auth-label" data-i18n="auth.full_name">Full Name *</label>
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">👤</span>
+                <input
+                  type="text"
+                  id="signUpName"
+                  class="auth-input"
+                  placeholder="e.g. Sunita Devi Patil or Dr. Rajesh Kulkarni"
+                  data-i18n-placeholder="auth.full_name_ph"
+                  required />
+              </div>
+            </div>
+
+            <!-- Email Address -->
+            <div class="auth-form-group">
+              <label for="signUpEmail" class="auth-label" data-i18n="auth.email"
+                >Email Address *</label
+              >
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">✉</span>
+                <input
+                  type="email"
+                  id="signUpEmail"
+                  class="auth-input"
+                  placeholder="e.g. sunita.patil@health.gov.in"
+                  data-i18n-placeholder="auth.email_ph"
+                  required />
+              </div>
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="auth-form-group">
+              <label for="signUpMobile" class="auth-label" data-i18n="auth.mobile"
+                >Mobile Number *</label
+              >
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">📱</span>
+                <input
+                  type="tel"
+                  id="signUpMobile"
+                  class="auth-input"
+                  placeholder="e.g. 9823456780"
+                  pattern="[0-9]{10}"
+                  title="10-digit mobile number"
+                  data-i18n-placeholder="auth.mobile_ph"
+                  required />
+              </div>
+            </div>
+
+            <!-- Select Role -->
+            <div class="auth-form-group">
+              <label for="signUpRole" class="auth-label" data-i18n="auth.role_label">Select Role *</label>
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">🏥</span>
+                <select id="signUpRole" class="auth-input" required>
+                  <option value="" disabled selected data-i18n="auth.role_select_ph">
+                    -- Select Your Healthcare Role --
+                  </option>
+                  <option value="Patient" data-i18n="auth.role_patient">Patient (Citizen Access)</option>
+                  <option value="ASHA Worker" data-i18n="auth.role_asha">
+                    ASHA Worker (Field Mobilizer)
+                  </option>
+                  <option value="Doctor" data-i18n="auth.role_doctor">Doctor (Medical Officer)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Permanent Registration Number (Optional) -->
+            <div class="auth-form-group">
+              <label for="signUpRegNo" class="auth-label" data-i18n="auth.reg_no">
+                Permanent Registration Number
+                <span class="optional-text" data-i18n="auth.reg_no_optional">(Optional)</span>
+              </label>
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">🪪</span>
+                <input
+                  type="text"
+                  id="signUpRegNo"
+                  class="auth-input"
+                  data-i18n-placeholder="auth.reg_no_ph"
+                  placeholder="e.g. MMC-98214 or Circle Sub-Centre ID" />
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="auth-form-group">
+              <label for="signUpPassword" class="auth-label" data-i18n="auth.password">Password *</label>
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">🔒</span>
+                <input
+                  type="password"
+                  id="signUpPassword"
+                  class="auth-input"
+                  data-i18n-placeholder="auth.password_ph"
+                  placeholder="Create password (min. 6 characters)"
+                  minlength="6"
+                  required />
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="auth-form-group">
+              <label for="signUpConfirmPassword" class="auth-label" data-i18n="auth.confirm_password"
+                >Confirm Password *</label
+              >
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">🔒</span>
+                <input
+                  type="password"
+                  id="signUpConfirmPassword"
+                  class="auth-input"
+                  data-i18n-placeholder="auth.confirm_password_ph"
+                  placeholder="Re-enter your password"
+                  minlength="6"
+                  required />
+              </div>
+            </div>
+
+            <!-- Create Account Button -->
+            <button type="submit" id="signUpSubmitBtn" class="btn-auth-primary">
+              <span data-i18n="auth.register_submit">Create Account ➔</span>
+            </button>
+
+            <!-- Switch to Sign In -->
+            <div class="auth-divider">
+              <span data-i18n="auth.or">OR</span>
+            </div>
+
+            <div class="auth-switch-footer">
+              <span data-i18n="auth.already_account">Already have an account?</span>
+              <button type="button" id="switchToSignInBtn" data-i18n="nav.signin">Sign In</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ==================================================================
+             PANEL 3: SUCCESS CONFIRMATION STATE (Displayed after Sign Up)
+             ================================================================== -->
+        <div
+          id="signUpConfirmationPanel"
+          class="auth-confirm-panel"
+          style="display: none">
+          <div class="auth-confirm-icon-circle">✓</div>
+          <h2 class="auth-confirm-title" data-i18n="auth.reg_success_title">Registration Successful</h2>
+          <p class="auth-confirm-subtitle" data-i18n="auth.reg_success_sub">
+            Your account has been created successfully.
+          </p>
+
+          <div class="auth-confirm-summary-box">
+            <div class="auth-confirm-summary-row">
+              <span class="auth-confirm-summary-label" data-i18n="auth.field_fullname">Full Name:</span>
+              <span id="confirmSummaryName" class="auth-confirm-summary-val" data-i18n="auth.demo_asha_name"
+                >Sunita Devi</span
+              >
+            </div>
+            <div class="auth-confirm-summary-row">
+              <span class="auth-confirm-summary-label" data-i18n="auth.field_role">Role:</span>
+              <span id="confirmSummaryRole" class="auth-confirm-summary-val" data-i18n="login.role_asha"
+                >ASHA Worker</span
+              >
+            </div>
+            <div class="auth-confirm-summary-row">
+              <span class="auth-confirm-summary-label" data-i18n="auth.field_email">Email:</span>
+              <span id="confirmSummaryEmail" class="auth-confirm-summary-val"
+                >sunita@health.gov.in</span
+              >
+            </div>
+            <div class="auth-confirm-summary-row">
+              <span class="auth-confirm-summary-label" data-i18n="auth.net_status_lbl">Network Status:</span>
+              <span
+                class="auth-confirm-summary-val"
+                style="color: var(--status-green)"
+                 data-i18n="auth.net_status_val">● Authorized Frontline Access</span
+              >
+            </div>
+          </div>
+
+          <p
+            style="
+              font-size: 0.8rem;
+              color: var(--color-slate-500);
+              margin-bottom: 1.25rem;
+            " data-i18n="auth.unlock_desc">
+            Click below to unlock full access to the Maharashtra Medical Council
+            rural healthcare portal.
+          </p>
+
+          <button
+            type="button"
+            id="continueToWebsiteBtn"
+            class="btn-auth-primary">
+            <span data-i18n="auth.btn_continue_web">Continue to Website</span>
+            <span>➔</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal-overlay">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title" data-i18n="auth.pwd_recovery_title">Password Recovery</h3>
+          <button class="modal-close-btn" id="forgotModalCloseBtn">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p
+            style="
+              font-size: 0.875rem;
+              color: var(--color-slate-600);
+              margin-bottom: 1.25rem;
+              line-height: 1.6;
+            "
+            data-i18n="auth.pwd_recovery_desc">
+            Enter your registered Email Address or Permanent Registration Number
+            to receive a one-time reset authorization code.
+          </p>
+          <div class="auth-form-group">
+            <label class="auth-label" data-i18n="auth.lbl_reg_number">Email or Permanent Reg. Number</label>
+            <input
+              type="text"
+              id="forgotInput"
+              class="auth-input no-icon"
+              data-i18n-placeholder="auth.reg_no_ph"
+              placeholder="e.g. name@phc.org or MMC-XXXXX" />
+          </div>
+          <div class="demo-only-callout" style="margin-bottom: 1.25rem">
+            <span data-i18n="auth.dho_reset_note"><span data-i18n="auth.dho_reset_note">Under MMC guidelines, credentials can also be reset via your District Health Officer (DHO).</span></span>
+          </div>
+          <button
+            type="button"
+            id="forgotSubmitBtn"
+            class="btn-auth-primary"
+            style="margin-bottom: 0.5rem"
+            data-i18n="auth.send_reset">
+            Send Reset Instructions
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Official MMC Footer Strip -->
+    <footer
+      style="
+        text-align: center;
+        padding: 1.25rem 1rem;
+        background: rgba(13, 47, 34, 0.04);
+        border-top: 1px solid rgba(13, 47, 34, 0.08);
+        font-size: 0.775rem;
+        color: var(--color-slate-500);
+      ">
+      <div class="container" data-i18n="footer.copyright">
+        © 2026 Maharashtra Medical Council, Mumbai. All Rights Reserved. •
+        Government of Maharashtra Prototype
+      </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script src="js/translations.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      // Authentication Page Controller Logic
+      document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isLogout = urlParams.get("logout") === "true";
+
+        if (isLogout) {
+          sessionStorage.removeItem("loggedIn");
+          localStorage.removeItem("loggedIn");
+          sessionStorage.removeItem("mmc_user_session");
+          localStorage.removeItem("mmc_user_session");
+          if (typeof showToast === "function") {
+            showToast("✓ You have been logged out safely.");
+          }
+        } else {
+          // Check if session already exists
+          const existingSession =
+            sessionStorage.getItem("mmc_user_session") ||
+            localStorage.getItem("mmc_user_session");
+          const isLoggedIn =
+            sessionStorage.getItem("loggedIn") === "true" ||
+            localStorage.getItem("loggedIn") === "true";
+          if (isLoggedIn && existingSession) {
+            try {
+              const session = JSON.parse(existingSession);
+              const banner = document.getElementById("activeSessionBanner");
+              const nameSpan = document.getElementById("activeUserName");
+              const roleSpan = document.getElementById("activeUserRole");
+              if (banner && nameSpan && roleSpan) {
+                nameSpan.textContent = session.name || "User";
+                roleSpan.textContent = session.role || "Member";
+                banner.style.display = "flex";
+              }
+            } catch (e) {}
+          }
+        }
+
+        // Tab Switching
+        const tabSignIn = document.getElementById("tabSignInBtn");
+        const tabSignUp = document.getElementById("tabSignUpBtn");
+        const signInPanel = document.getElementById("signInPanel");
+        const signUpPanel = document.getElementById("signUpPanel");
+        const confirmationPanel = document.getElementById(
+          "signUpConfirmationPanel",
+        );
+
+        function showSignIn() {
+          tabSignIn.classList.add("active");
+          tabSignUp.classList.remove("active");
+          tabSignIn.setAttribute("aria-selected", "true");
+          tabSignUp.setAttribute("aria-selected", "false");
+          signInPanel.style.display = "block";
+          signUpPanel.style.display = "none";
+          confirmationPanel.style.display = "none";
+        }
+
+        function showSignUp() {
+          tabSignUp.classList.add("active");
+          tabSignIn.classList.remove("active");
+          tabSignUp.setAttribute("aria-selected", "true");
+          tabSignIn.setAttribute("aria-selected", "false");
+          signUpPanel.style.display = "block";
+          signInPanel.style.display = "none";
+          confirmationPanel.style.display = "none";
+        }
+
+        tabSignIn?.addEventListener("click", showSignIn);
+        tabSignUp?.addEventListener("click", showSignUp);
+        document
+          .getElementById("switchToSignUpBtn")
+          ?.addEventListener("click", showSignUp);
+        document
+          .getElementById("switchToSignInBtn")
+          ?.addEventListener("click", showSignIn);
+
+        // Check URL parameter or hash for default tab selection (Requirement 2 & 8)
+        const tabParam = (
+          urlParams.get("tab") || window.location.hash.replace("#", "")
+        ).toLowerCase();
+        if (
+          tabParam === "signup" ||
+          tabParam === "register" ||
+          tabParam === "create"
+        ) {
+          showSignUp();
+        } else {
+          showSignIn();
+        }
+
+        // Resume Active Session
+        document
+          .getElementById("resumeSessionBtn")
+          ?.addEventListener("click", () => {
+            sessionStorage.removeItem("userLoggedOut");
+            const role =
+              localStorage.getItem("userRole") ||
+              sessionStorage.getItem("userRole") ||
+              "asha";
+            if (role === "patient")
+              window.location.href = "patient-dashboard.html";
+            else if (role === "doctor")
+              window.location.href = "doctor-dashboard.html";
+            else window.location.href = "asha-dashboard.html";
+          });
+
+        // Toggle Password Visibility
+        document
+          .getElementById("toggleSignInPwd")
+          ?.addEventListener("click", function () {
+            const pwdInput = document.getElementById("signInPassword");
+            if (pwdInput.type === "password") {
+              pwdInput.type = "text";
+              this.textContent = "🙈";
+            } else {
+              pwdInput.type = "password";
+              this.textContent = "👁";
+            }
+          });
+
+        // References for Sign In Form & Role Selection
+        const signInForm = document.getElementById("signInForm");
+        const submitBtn = document.getElementById("signInSubmitBtn");
+        const roleCards = document.querySelectorAll(".auth-role-card");
+        let currentSelectedRoleKey = "asha";
+
+        function applyRoleSelection(card) {
+          if (!card) return;
+          roleCards.forEach((c) => c.classList.remove("selected"));
+          card.classList.add("selected");
+
+          currentSelectedRoleKey = card.getAttribute("data-role-key") || "asha";
+          const email =
+            card.getAttribute("data-demo-email") || "sunita.asha@health.gov.in";
+          const reg = card.getAttribute("data-demo-reg") || "ASHA-MH-409";
+          const roleDisplay =
+            card.getAttribute("data-role-display") || "ASHA Worker";
+          const name = card.getAttribute("data-demo-name") || "Sunita Tai";
+
+          const emailInput = document.getElementById("signInEmail");
+          const pwdInput = document.getElementById("signInPassword");
+          const regInput = document.getElementById("signInRegNo");
+
+          if (emailInput) emailInput.value = email;
+          if (pwdInput) pwdInput.value = "Swasthya@2026";
+          if (regInput) regInput.value = reg;
+
+          if (signInForm) {
+            signInForm.dataset.selectedRole = roleDisplay;
+            signInForm.dataset.selectedRoleKey = currentSelectedRoleKey;
+            signInForm.dataset.selectedName = name;
+          }
+
+          const roleDisplayKey = currentSelectedRoleKey === 'patient'
+            ? 'auth.role_patient'
+            : currentSelectedRoleKey === 'doctor'
+            ? 'auth.role_doctor'
+            : 'auth.role_asha';
+          const localizedRole = typeof t === "function" ? t(roleDisplayKey, roleDisplay) : roleDisplay;
+          const signInAsLabel = typeof t === "function" ? t("auth.signin_as", "Sign In as") : "Sign In as";
+
+          if (submitBtn) {
+            submitBtn.innerHTML = `<span>${signInAsLabel} ${localizedRole}</span> <span>➔</span>`;
+          }
+
+          if (typeof showToast === "function") {
+            const roleSelectedLabel = typeof t === "function" ? t("alert.role_selected", "Role selected:") : "Role selected:";
+            showToast(`${roleSelectedLabel} ${localizedRole} (${name})`);
+          }
+        }
+
+        roleCards.forEach((card) => {
+          card.addEventListener("click", () => applyRoleSelection(card));
+        });
+
+        window.addEventListener("languageChanged", () => {
+          const selCard = document.querySelector(".auth-role-card.selected");
+          if (selCard) {
+            applyRoleSelection(selCard);
+          }
+        });
+
+        // Set default role (ASHA Worker) on load safely
+        const defaultCard =
+          document.querySelector('.auth-role-card[data-role-key="asha"]') ||
+          roleCards[0];
+        if (defaultCard) {
+          applyRoleSelection(defaultCard);
+        }
+
+        // Sign In Form Submission Handler
+        function handleSignInSubmit(e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+
+          const emailInput = document.getElementById("signInEmail");
+          const regInput = document.getElementById("signInRegNo");
+          const email = emailInput ? emailInput.value.trim() : "";
+          const regNo = regInput ? regInput.value.trim() : "";
+
+          let selectedRole =
+            (signInForm && signInForm.dataset.selectedRoleKey) ||
+            currentSelectedRoleKey ||
+            "asha";
+          let userName =
+            (signInForm && signInForm.dataset.selectedName) || "Sunita Tai";
+          let roleDisplay =
+            (signInForm && signInForm.dataset.selectedRole) || "ASHA Worker";
+
+          if (selectedRole === "patient") {
+            roleDisplay = "Patient";
+            if (!userName || userName === "User") userName = "Sita Devi";
+          } else if (selectedRole === "doctor") {
+            roleDisplay = "Doctor";
+            if (!userName || userName === "User") userName = "Dr. Sharma";
+          } else {
+            selectedRole = "asha";
+            roleDisplay = "ASHA Worker";
+            if (!userName || userName === "User") userName = "Sunita Tai";
+          }
+
+          sessionStorage.removeItem("userLoggedOut");
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("userRole", selectedRole);
+          localStorage.setItem("userName", userName);
+
+          sessionStorage.setItem("loggedIn", "true");
+          sessionStorage.setItem("userRole", selectedRole);
+          sessionStorage.setItem("userName", userName);
+
+          const sessionData = {
+            authenticated: true,
+            name: userName,
+            email: email || `${selectedRole}@health.gov.in`,
+            role: roleDisplay,
+            roleKey: selectedRole,
+            regNo: regNo || "MMC-DEMO-2026",
+            loginTime: new Date().toLocaleTimeString(),
+          };
+
+          localStorage.setItem("mmc_user_session", JSON.stringify(sessionData));
+          sessionStorage.setItem(
+            "mmc_user_session",
+            JSON.stringify(sessionData),
+          );
+
+          if (typeof showToast === "function") {
+            showToast(
+              `✓ Welcome, ${userName}! Opening ${roleDisplay} Dashboard...`,
+            );
+          }
+
+          // Direct role-based redirection (Requirements 3 & 5)
+          setTimeout(() => {
+            if (selectedRole === "patient") {
+              window.location.href = "patient-dashboard.html";
+            } else if (selectedRole === "asha") {
+              window.location.href = "asha-dashboard.html";
+            } else if (selectedRole === "doctor") {
+              window.location.href = "doctor-dashboard.html";
+            } else {
+              window.location.href = "asha-dashboard.html";
+            }
+          }, 150);
+        }
+
+        signInForm?.addEventListener("submit", handleSignInSubmit);
+        submitBtn?.addEventListener("click", handleSignInSubmit);
+
+        // Sign Up Form Submission
+        const signUpForm = document.getElementById("signUpForm");
+        let registeredUser = null;
+
+        signUpForm?.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const name = document.getElementById("signUpName").value.trim();
+          const email = document.getElementById("signUpEmail").value.trim();
+          const mobile = document.getElementById("signUpMobile").value.trim();
+          const role = document.getElementById("signUpRole").value;
+          const regNo = document.getElementById("signUpRegNo").value.trim();
+          const pwd = document.getElementById("signUpPassword").value;
+          const confirmPwd = document.getElementById(
+            "signUpConfirmPassword",
+          ).value;
+
+          if (pwd !== confirmPwd) {
+            if (typeof showToast === "function") {
+              showToast("⚠️ Passwords do not match. Please verify.");
+            } else {
+              alert("Passwords do not match. Please verify.");
+            }
+            return;
+          }
+
+          registeredUser = {
+            authenticated: true,
+            name: name,
+            email: email,
+            mobile: mobile,
+            role: role,
+            regNo: regNo || "MMC-REG-NEW",
+            loginTime: new Date().toLocaleTimeString(),
+          };
+
+          // Render Confirmation Screen
+          document.getElementById("confirmSummaryName").textContent = name;
+          document.getElementById("confirmSummaryRole").textContent = role;
+          document.getElementById("confirmSummaryEmail").textContent = email;
+
+          signUpPanel.style.display = "none";
+          confirmationPanel.style.display = "block";
+
+          if (typeof showToast === "function") {
+            showToast("✓ Registration Successful");
+          }
+        });
+
+        // Continue to Website Button (from confirmation panel)
+        document
+          .getElementById("continueToWebsiteBtn")
+          ?.addEventListener("click", () => {
+            sessionStorage.setItem("loggedIn", "true");
+            localStorage.setItem("loggedIn", "true");
+
+            let roleKey = "asha";
+            let target = "asha-dashboard.html";
+            let userName = "Sunita Tai";
+            if (registeredUser) {
+              const r = (registeredUser.role || "").toLowerCase();
+              if (r.includes("patient")) {
+                roleKey = "patient";
+                target = "patient-dashboard.html";
+              } else if (r.includes("doctor")) {
+                roleKey = "doctor";
+                target = "doctor-dashboard.html";
+              }
+              userName = registeredUser.name || userName;
+              registeredUser.roleKey = roleKey;
+              sessionStorage.setItem("userRole", roleKey);
+              localStorage.setItem("userRole", roleKey);
+              sessionStorage.setItem("userName", userName);
+              localStorage.setItem("userName", userName);
+              sessionStorage.setItem(
+                "mmc_user_session",
+                JSON.stringify(registeredUser),
+              );
+              localStorage.setItem(
+                "mmc_user_session",
+                JSON.stringify(registeredUser),
+              );
+            } else {
+              sessionStorage.setItem("userRole", "asha");
+              localStorage.setItem("userRole", "asha");
+              sessionStorage.setItem("userName", userName);
+              localStorage.setItem("userName", userName);
+            }
+            window.location.href = target;
+          });
+
+        // Forgot Password Modal Handlers
+        const forgotModal = document.getElementById("forgotPasswordModal");
+        document
+          .getElementById("forgotPasswordTrigger")
+          ?.addEventListener("click", () => {
+            forgotModal.classList.add("open");
+          });
+        document
+          .getElementById("forgotModalCloseBtn")
+          ?.addEventListener("click", () => {
+            forgotModal.classList.remove("open");
+          });
+        document
+          .getElementById("forgotSubmitBtn")
+          ?.addEventListener("click", () => {
+            const inputVal = document
+              .getElementById("forgotInput")
+              .value.trim();
+            if (!inputVal) {
+              if (typeof showToast === "function") {
+                showToast("Please enter your email or MMC registration number");
+              }
+              return;
+            }
+            forgotModal.classList.remove("open");
+            if (typeof showToast === "function") {
+              showToast(
+                `✓ Reset instructions dispatched for ${inputVal}. Check your registered mobile/email.`,
+              );
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

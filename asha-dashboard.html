@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="page_title.asha">ASHA Worker Field Dashboard — Swasthya Setu | Maharashtra Medical Council</title>
+    <meta
+      name="description"
+      content="Main operational frontline field dashboard for ASHA Worker Sunita Tai at Sub-Centre Vadgaon. Triage risk screening, patient registration, appointment booking, referral tracker, and follow-up management." />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/png" href="assets/mmc_logo.png" />
+
+    <!-- Authentication Gatekeeper & Role Guard -->
+    <script>
+      (function() {
+        const userLoggedOut = sessionStorage.getItem("userLoggedOut") === "true";
+        if (userLoggedOut) {
+          window.location.replace("login.html");
+          return;
+        }
+        if (localStorage.getItem("loggedIn") !== "true" || localStorage.getItem("userRole") !== "asha") {
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("userRole", "asha");
+          localStorage.setItem("userName", "Sunita Tai");
+          sessionStorage.setItem("loggedIn", "true");
+          sessionStorage.setItem("userRole", "asha");
+          sessionStorage.setItem("userName", "Sunita Tai");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Top Utility Government Bar -->
+    <div class="gov-topbar">
+      <div class="container gov-topbar-content">
+        <div class="gov-topbar-left">
+          <span class="gov-badge">
+            <img
+              src="assets/mmc_logo.png"
+              alt="Govt Emblem"
+              class="gov-emblem-small" />
+            <span data-i18n="gov.title">Government of Maharashtra</span>
+          </span>
+          <span style="opacity: 0.4">|</span>
+          <span class="gov-contact-item" data-i18n="asha_dash.frontline_banner">Frontline Field Portal • Circle #14</span>
+        </div>
+        <div class="gov-topbar-right">
+          <div class="accessibility-controls" title="Adjust Text Size" data-i18n-title="gov.font_adjust">
+            <button id="fontDecBtn" class="font-resize-btn" aria-label="Decrease Font Size">A-</button>
+            <button id="fontResetBtn" class="font-resize-btn" aria-label="Reset Font Size">A</button>
+            <button id="fontIncBtn" class="font-resize-btn" aria-label="Increase Font Size">A+</button>
+          </div>
+          <div class="lang-select-wrapper">
+            <span class="lang-globe-icon" aria-hidden="true">🌐</span>
+            <select
+              id="langSelect"
+              class="lang-select"
+              aria-label="Select Language">
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+              <option value="mr">मराठी</option>
+            </select>
+          </div>
+          <div id="userSessionPill" class="gov-user-pill">
+            <span id="userSessionRoleIcon">👩‍⚕️</span>
+            <span id="userSessionName" data-i18n="common.name_sunita">Sunita Tai</span>
+          </div>
+          <button id="logoutBtn" class="gov-logout-btn" title="Sign out">
+            <span>🚪</span> <span data-i18n="gov.logout">Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Official Main Navbar -->
+    <header class="site-navbar">
+      <div class="container navbar-container">
+        <a href="index.html" class="brand-link" id="navBrandLink">
+          <img
+            src="assets/mmc_logo.png"
+            alt="Maharashtra Medical Council Logo"
+            class="brand-logo-img" />
+          <div class="brand-text">
+            <span class="brand-title" data-i18n="brand.title">Maharashtra Medical Council, Mumbai</span>
+            <span class="brand-subtitle" data-i18n="common.portal_asha">Swasthya Setu — ASHA Frontline Operations</span>
+          </div>
+        </a>
+
+        <nav class="desktop-nav">
+          <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
+            <li><a href="asha-dashboard.html" class="nav-link active" data-i18n="nav.dashboard">Dashboard</a></li>
+            <li><a href="#ashaPatientsSection" class="nav-link" data-i18n="nav.patients">Patients</a></li>
+            <li><a href="#ashaQueueSection" class="nav-link" data-i18n="nav.appointments">Appointments</a></li>
+            <li><a href="#ashaReferralsSection" class="nav-link" data-i18n="nav.referrals">Referrals</a></li>
+            <li><a href="#ashaFollowUpsSection" class="nav-link" data-i18n="nav.followups">Follow-Ups</a></li>
+            <li><a href="about.html" target="_blank" class="nav-link" data-i18n="nav.about">About</a></li>
+          </ul>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem">
+          <button id="mobileNavToggle" class="mobile-nav-toggle" aria-label="Open Navigation Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation">
+      <div class="drawer-header">
+        <div style="font-weight: 800; color: #ffffff" data-i18n="drawer.asha_title">ASHA Field Operations</div>
+        <button id="drawerCloseBtn" data-i18n="common.modal_close" data-i18n="common.modal_close" class="drawer-close-btn" aria-label="Close Navigation Menu">✕</button>
+      </div>
+      <div class="drawer-lang-section" style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-slate-200);">
+        <label for="drawerLangSelect" class="drawer-lang-label" data-i18n="gov.lang_select">Language / भाषा :</label>
+        <div class="drawer-lang-wrapper">
+          <span class="lang-globe-icon" aria-hidden="true">🌐</span>
+          <select id="drawerLangSelect" class="drawer-lang-select" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+            <option value="mr">मराठी</option>
+          </select>
+        </div>
+      </div>
+      <div class="drawer-body">
+        <a href="index.html" class="drawer-link" data-i18n="nav.home">Home</a>
+        <a href="asha-dashboard.html" class="drawer-link active" data-i18n="nav.dashboard">Dashboard</a>
+        <a href="#ashaPatientsSection" class="drawer-link" data-i18n="nav.patients">Patients</a>
+        <a href="#ashaQueueSection" class="drawer-link" data-i18n="nav.appointments">Appointments</a>
+        <a href="#ashaReferralsSection" class="drawer-link" data-i18n="nav.referrals">Referrals</a>
+        <a href="#ashaFollowUpsSection" class="drawer-link" data-i18n="nav.followups">Follow-Ups</a>
+        <a href="about.html" class="drawer-link" data-i18n="nav.about">About</a>
+        <button id="drawerLogoutBtn" class="drawer-link" style="width: 100%; text-align: left; background: none; border: none; cursor: pointer; color: #ef4444;">
+          🚪 <span data-i18n="gov.logout">Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+      <!-- ASHA Hero Header (Requirement 3) -->
+      <section class="role-hero-banner">
+        <div class="container role-hero-flex">
+          <div class="role-hero-profile">
+            <div class="role-avatar-circle" title="ASHA Worker Profile">
+              👩‍⚕️
+            </div>
+            <div class="role-profile-details">
+              <div class="role-hero-greeting" data-i18n="asha_dash.portal_title">Frontline Field Portal</div>
+              <h1 class="role-hero-name" data-i18n="asha_dash.welcome">Good Morning, Sunita Tai</h1>
+              <div class="role-hero-meta">
+                <span class="role-meta-tag" data-i18n="asha_dash.subcentre">🏥 Sub-Centre Vadgaon • Circle #14</span>
+                <span class="role-meta-tag" data-i18n="asha_dash.reg_no">🪪 Reg: ASHA-MH-409</span>
+                <span class="role-meta-tag" style="background: rgba(34, 197, 94, 0.2); border-color: #86efac;">
+                  <span class="status-online-dot"></span> <span data-i18n="asha_dash.online_sync">Online (Demo Sync)</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="role-hero-actions">
+            <button type="button" id="ashaRegPatientBtn" class="btn-hero-action">
+              <span>➕</span> <span data-i18n="asha_dash.btn_reg_patient">Register Patient</span>
+            </button>
+            <button type="button" id="ashaRiskAssessBtn" class="btn-hero-secondary" style="background: rgba(229, 184, 59, 0.25); border-color: var(--color-gold-light);">
+              <span>⚠️</span> <span data-i18n="asha_dash.btn_risk_screen">Priority Triage Screening</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div class="container" style="padding-bottom: 4rem;">
+        
+        <!-- Summary KPI Metric Cards (Requirement 3) -->
+        <div class="kpi-metric-grid">
+          <!-- KPI 1: Total Patients -->
+          <div class="kpi-metric-card">
+            <div class="kpi-card-header">
+              <div class="kpi-icon-pill">👥</div>
+              <span style="font-size: 0.7rem; color: #16a34a; font-weight: 700;" data-i18n="common.plus_3_week">+3 this week</span>
+            </div>
+            <div class="kpi-value" id="ashaKpiTotalPatients">148</div>
+            <div class="kpi-label" data-i18n="asha_dash.kpi_total_patients">Total Patients</div>
+            <div class="kpi-subtext" data-i18n="asha_dash.kpi_total_sub">Registered in Vadgaon Circle</div>
+          </div>
+
+          <!-- KPI 2: Today's Appointments -->
+          <div class="kpi-metric-card">
+            <div class="kpi-card-header">
+              <div class="kpi-icon-pill">📅</div>
+              <span class="triage-badge triage-badge-priority" style="font-size: 0.65rem; padding: 0.1rem 0.4rem;" data-i18n="asha_dash.kpi_today_val_sub">OPD Open</span>
+            </div>
+            <div class="kpi-value" id="ashaKpiTodayAppts">6</div>
+            <div class="kpi-label" data-i18n="asha_dash.kpi_today_appts">Today's Appointments</div>
+            <div class="kpi-subtext" data-i18n="asha_dash.kpi_appts_sub">PHC ABC & Sub-Centre</div>
+          </div>
+
+          <!-- KPI 3: High-Risk Patients -->
+          <div class="kpi-metric-card" style="border-left: 4px solid #ef4444;">
+            <div class="kpi-card-header">
+              <div class="kpi-icon-pill" style="background: #fee2e2; color: #dc2626;">⚠️</div>
+              <span class="kpi-badge-alert" data-i18n="asha_dash.kpi_high_risk_badge">Flagged</span>
+            </div>
+            <div class="kpi-value" id="ashaKpiHighRisk" style="color: #b91c1c;">4</div>
+            <div class="kpi-label" data-i18n="asha_dash.kpi_high_risk">High-Risk Patients</div>
+            <div class="kpi-subtext" data-i18n="asha_dash.kpi_high_risk_sub">Sita Devi + 3 active monitoring</div>
+          </div>
+
+          <!-- KPI 4: Pending Referrals -->
+          <div class="kpi-metric-card">
+            <div class="kpi-card-header">
+              <div class="kpi-icon-pill">🔄</div>
+              <span style="font-size: 0.7rem; color: #d97706; font-weight: 700;" data-i18n="asha_dash.kpi_pending_ref_badge">In Transit</span>
+            </div>
+            <div class="kpi-value">3</div>
+            <div class="kpi-label" data-i18n="asha_dash.kpi_pending_ref">Pending Referrals</div>
+            <div class="kpi-subtext" data-i18n="asha_dash.kpi_pending_ref_sub">REF-1024 to Rural Hospital</div>
+          </div>
+
+          <!-- KPI 5: Follow-Ups Due -->
+          <div class="kpi-metric-card">
+            <div class="kpi-card-header">
+              <div class="kpi-icon-pill">🔔</div>
+              <span class="triage-badge triage-badge-priority" style="font-size: 0.65rem; padding: 0.1rem 0.4rem;" data-i18n="asha_dash.kpi_followups_badge">Action</span>
+            </div>
+            <div class="kpi-value">5</div>
+            <div class="kpi-label" data-i18n="asha_dash.kpi_followups_due">Follow-Ups Due</div>
+            <div class="kpi-subtext" data-i18n="asha_dash.kpi_followups_sub">2 due today in Vadgaon</div>
+          </div>
+
+          <!-- KPI 6: Medicine Alerts -->
+          <div class="kpi-metric-card">
+            <div class="kpi-card-header">
+              <div class="kpi-icon-pill">💊</div>
+              <span class="kpi-badge-alert" data-i18n="asha_dash.kpi_meds_badge">Low Stock</span>
+            </div>
+            <div class="kpi-value" style="color: #b45309;">2</div>
+            <div class="kpi-label" data-i18n="asha_dash.kpi_med_alerts">Medicine Alerts</div>
+            <div class="kpi-subtext" data-i18n="asha_dash.kpi_med_alerts_sub">Amoxicillin low at Sub-Centre</div>
+          </div>
+        </div>
+
+        <!-- 8 Frontline Quick Actions (Requirement 3) -->
+        <div style="margin-bottom: 2.5rem;">
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin-bottom: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>⚡</span> <span data-i18n="asha_dash.quick_actions_title">Frontline Quick Actions (8 Field Tasks)</span>
+          </h2>
+          <div class="field-action-grid">
+            <!-- 1. Register Patient -->
+            <div class="field-action-card" id="ashaRegPatientCard" onclick="document.getElementById('ashaRegPatientBtn').click();">
+              <div class="action-icon-circle">➕</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="asha_dash.act_reg_title">Register Patient</div>
+                <div class="action-desc" data-i18n="asha_dash.act_reg_desc">Enrol villager & generate MMC Health ID</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </div>
+
+            <!-- 2. Record Field Vitals -->
+            <div class="field-action-card" id="ashaRecordVitalsCard" onclick="document.getElementById('ashaRiskAssessBtn').click();">
+              <div class="action-icon-circle">⚠️</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="asha_dash.act_vitals_title">Record Field Vitals</div>
+                <div class="action-desc" data-i18n="asha_dash.act_vitals_desc">Screen BP, SpO2 & triage priority level</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </div>
+
+            <!-- 3. Book PHC Appointment -->
+            <div class="field-action-card" id="ashaBookApptCard" onclick="document.getElementById('ashaBookApptBtnTrigger').click();">
+              <div class="action-icon-circle">📅</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="asha_dash.act_book_title">Book PHC Appointment</div>
+                <div class="action-desc" data-i18n="asha_dash.act_book_desc">Book slot with PHC ABC or Mobile Medical Unit</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </div>
+
+            <!-- 4. Teleconsultation -->
+            <div class="field-action-card" id="ashaTeleconsultCard" onclick="openModal(document.getElementById('ashaTeleconsultModal'));">
+              <div class="action-icon-circle">📞</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="asha_dash.act_tele_title">Teleconsultation</div>
+                <div class="action-desc" data-i18n="asha_dash.act_tele_desc">Live audio/video link with Dr. Sharma</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </div>
+
+            <!-- 5. Create Referral -->
+            <a href="#ashaReferralsSection" class="field-action-card">
+              <div class="action-icon-circle">🔄</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="asha_dash.act_ref_title">Create Referral</div>
+                <div class="action-desc" data-i18n="asha_dash.act_ref_desc">Direct patient to Rural / Sub-District Hospital</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </a>
+
+            <!-- 6. Follow-Ups -->
+            <a href="#ashaFollowUpsSection" class="field-action-card">
+              <div class="action-icon-circle">🔔</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="asha_dash.act_followup_title">Follow-Ups</div>
+                <div class="action-desc" data-i18n="asha_dash.act_followup_desc">Track ANC mother visits & chronic disease review</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </a>
+
+            <!-- 7. Medicine Availability -->
+            <a href="#ashaMedicineSection" id="ashaMedicineAvailabilityBtn" class="field-action-card">
+              <div class="action-icon-circle">💊</div>
+              <div class="action-content">
+                <div class="action-title" data-i18n="asha_dash.act_meds_title">Medicine Availability</div>
+                <div class="action-desc" data-i18n="asha_dash.act_meds_desc">Check nearby pharmacy stock & save patient travel</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </a>
+
+            <!-- 8. Emergency Red Alert -->
+            <div class="field-action-card emergency" id="ashaSosCard" onclick="openModal(document.getElementById('ashaEmergencyModal'));">
+              <div class="action-icon-circle">🚨</div>
+              <div class="action-content">
+                <div class="action-title" style="color: #b91c1c;" data-i18n="asha_dash.act_sos_title">Emergency SOS</div>
+                <div class="action-desc" data-i18n="asha_dash.act_sos_desc">Trigger 108 ambulance dispatch and alert PHC Doctor</div>
+              </div>
+              <span class="action-arrow">➔</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Village Patient Registry (Vadgaon Circle) -->
+        <section id="ashaPatientsSection" style="margin-bottom: 3rem; scroll-margin-top: 5rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                <span>👥</span> <span data-i18n="asha_dash.patients_title">Village Patient Registry & Roster</span>
+              </h2>
+              <p style="font-size: 0.8rem; color: #64748b; margin: 0.2rem 0 0 0;" data-i18n="asha_dash.patients_sub">Enrolled villagers, health cards, and active triage tracking (Vadgaon Circle #14)</p>
+            </div>
+            <button type="button" class="btn-auth-primary" style="padding: 0.45rem 1rem; font-size: 0.825rem;" onclick="openModal(document.getElementById('ashaRegPatientModal'))">
+              ➕ <span data-i18n="asha_dash.btn_reg_patient">Register Patient</span>
+            </button>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1rem 1.25rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05); margin-bottom: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+            <div class="auth-input-wrapper" style="flex: 1; min-width: 220px; margin: 0;">
+              <span class="auth-input-icon">🔍</span>
+              <input type="text" id="ashaPatientSearchInput" class="auth-input" placeholder="Search patient by name, ID (e.g. MMC-PT-108), or village..." data-i18n-placeholder="asha_dash.search_patient_ph" />
+            </div>
+            <select id="ashaPatientPriorityFilter" class="auth-input" style="width: auto; min-width: 140px; margin: 0;">
+              <option value="all" data-i18n="asha_dash.filter_all">All Priorities</option>
+              <option value="High" data-i18n="asha_dash.filter_high">High Priority</option>
+              <option value="Priority" data-i18n="asha_dash.filter_priority">Priority</option>
+              <option value="Normal" data-i18n="asha_dash.filter_normal">Normal</option>
+            </select>
+          </div>
+
+          <div class="opd-queue-table-wrap">
+            <table class="opd-queue-table">
+              <thead>
+                <tr>
+                  <th data-i18n="asha_dash.th_patient">Patient Name & ID</th>
+                  <th data-i18n="asha_dash.th_demographics">Demographics</th>
+                  <th data-i18n="asha_dash.th_summary">Health Condition / Summary</th>
+                  <th data-i18n="asha_dash.th_vitals">Last Vitals</th>
+                  <th data-i18n="asha_dash.th_priority">Priority</th>
+                  <th data-i18n="asha_dash.th_actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ashaPatientsTableBody">
+                <!-- Dynamically populated from state.patients -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Queue Management Section (Requirement 3) -->
+        <section id="ashaQueueSection" style="margin-bottom: 3rem; scroll-margin-top: 5rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                <span>📋</span> <span data-i18n="asha_dash.queue_heading">Village Patient OPD Queue</span>
+              </h2>
+              <p style="font-size: 0.8rem; color: #64748b; margin: 0.2rem 0 0 0;" data-i18n="asha_dash.queue_subheading">Today's scheduled visits and triage status for PHC ABC</p>
+            </div>
+            <button type="button" id="ashaBookApptBtnTrigger" class="btn-auth-primary" style="padding: 0.45rem 1rem; font-size: 0.825rem;" onclick="openModal(document.getElementById('ashaBookApptModal'))">
+              <span data-i18n="asha_dash.btn_book_trigger">+ Book Patient Appointment</span>
+            </button>
+          </div>
+
+          <div class="opd-queue-table-wrap">
+            <table class="opd-queue-table">
+              <thead>
+                <tr>
+                  <th data-i18n="asha_dash.th_patient">Patient Name & ID</th>
+                  <th data-i18n="asha_dash.th_priority">Triage Priority</th>
+                  <th data-i18n="asha_dash.th_time_token">Time / Token</th>
+                  <th data-i18n="asha_dash.th_status">Consultation Status</th>
+                  <th data-i18n="asha_dash.th_actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ashaQueueTableBody">
+                <tr class="queue-row-high-priority">
+                  <td>
+                    <strong data-i18n="features.patient_sita">Sita Devi</strong>
+                    <div style="font-size: 0.725rem; color: #64748b;" data-i18n="asha_dash.row_sita_meta">MMC-PT-108 • Age 28 • ANC 24w</div>
+                  </td>
+                  <td><span class="triage-badge triage-badge-high" data-i18n="feat.badge_high_priority">🔴 High Priority</span></td>
+                  <td data-i18n="asha_dash.token_04">10:00 AM • Token #04</td>
+                  <td><span class="triage-badge" style="background: #fef3c7; color: #b45309;" data-i18n="asha_dash.badge_waiting_opd">Waiting in OPD</span></td>
+                  <td>
+                    <button type="button" class="btn-hero-secondary" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; color: #185a42; border-color: #cbd5e1;" onclick="showToast(t('toast.calling_doctor', 'Calling Dr. Sharma to notify high-priority maternal arrival'))" data-i18n="asha_dash.btn_notify_doc">
+                      📞 Notify Doctor
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong data-i18n="common.name_anita">Anita Shinde</strong>
+                    <div style="font-size: 0.725rem; color: #64748b;" data-i18n="asha_dash.row_anita_meta">MMC-PT-109 • Age 32 • Acute Fever</div>
+                  </td>
+                  <td><span class="triage-badge triage-badge-priority" data-i18n="common.badge_priority">🟡 Priority</span></td>
+                  <td data-i18n="asha_dash.token_05">10:30 AM • Token #05</td>
+                  <td><span class="triage-badge" style="background: #fef3c7; color: #b45309;" data-i18n="asha_dash.badge_waiting_opd">Waiting in OPD</span></td>
+                  <td>
+                    <button type="button" class="btn-hero-secondary" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; color: #185a42; border-color: #cbd5e1;" onclick="showToast(t('toast.token_checked', 'Token status checked'))" data-i18n="asha_dash.btn_check_token">
+                      Check Token
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong data-i18n="common.name_ramesh">Ramesh Patil</strong>
+                    <div style="font-size: 0.725rem; color: #64748b;" data-i18n="asha_dash.row_ramesh_meta">MMC-PT-110 • Age 54 • Diabetes Check</div>
+                  </td>
+                  <td><span class="triage-badge triage-badge-normal" data-i18n="common.badge_normal">🟢 Normal</span></td>
+                  <td data-i18n="asha_dash.token_01">11:00 AM • Token #01</td>
+                  <td><span class="triage-badge triage-badge-normal"><span data-i18n="asha_dash.badge_consulted" data-i18n="asha_dash.badge_consulted">Consulted ✓</span></span></td>
+                  <td>
+                    <button type="button" class="btn-hero-secondary" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; color: #185a42; border-color: #cbd5e1;" onclick="showToast(t('toast.rx_synced', 'Prescription synced to ASHA record'))" data-i18n="asha_dash.btn_view_rx">
+                      View Rx
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Referral Management Section with 4-Stage Stepper (Requirement 3) -->
+        <section id="ashaReferralsSection" style="margin-bottom: 3rem; scroll-margin-top: 5rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🔄</span> <span data-i18n="asha_dash.ref_mgmt_title">E-Referral Management & Tracking</span>
+              </h2>
+              <p style="font-size: 0.8rem; color: #64748b; margin: 0.2rem 0 0 0;" data-i18n="asha_dash.ref_mgmt_sub">Closed-loop referral tracker from Sub-Centre to Higher Health Facilities</p>
+            </div>
+            <button type="button" class="btn-auth-primary" style="padding: 0.45rem 1rem; font-size: 0.825rem;" onclick="openModal(document.getElementById('ashaCreateReferralModal'))">
+              <span data-i18n="asha_dash.btn_new_ref">+ Create New Referral</span>
+            </button>
+          </div>
+
+          <!-- Active Referral Card -->
+          <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+                  <span style="font-weight: 800; font-size: 1.15rem; color: var(--color-primary-darkest);" data-i18n="feat.ref_id_label">Referral ID: REF-1024</span>
+                  <span class="triage-badge triage-badge-high" data-i18n="asha_dash.ref_urgent_badge">🔴 Urgent Obstetric</span>
+                  <span id="referralCurrentStatusText" class="triage-badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 800;" data-i18n="feat.step_referred">
+                    Referred
+                  </span>
+                </div>
+                <div style="font-size: 0.85rem; color: #475569;">
+                  <strong data-i18n="common.lbl_patient">Patient:</strong> <span data-i18n="features.patient_sita">Sita Devi</span> (MMC-PT-108) • <strong data-i18n="common.lbl_from">From:</strong> <span data-i18n="common.subcentre_vadgaon">Sub-Centre Vadgaon</span> ➔ <strong data-i18n="common.lbl_to">To:</strong> <span data-i18n="p_dash.ref_hospital">Rural Hospital (RH) Vadgaon</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #64748b; margin-top: 0.25rem;">
+                  <strong data-i18n="p_dash.reason_lbl">Reason:</strong> <span data-i18n="asha_dash.ref_reason_title">Fetal Anomaly Ultrasonography & Gestational Hypertension Evaluation</span>
+                </div>
+              </div>
+
+              <!-- Static QR Code Placeholder -->
+              <div style="text-align: center; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: var(--radius-md); padding: 0.5rem 0.75rem;">
+                <div style="font-size: 2.25rem; line-height: 1;">📱</div>
+                <div style="font-size: 0.65rem; font-weight: 700; color: #475569; margin-top: 0.25rem;" data-i18n="asha_dash.qr_verified">QR VERIFIED</div>
+              </div>
+            </div>
+
+            <!-- 4-Stage Referral Stepper (Referred -> Arrived -> Consulted -> Completed) -->
+            <div class="referral-stepper">
+              <div id="referralProgressBarLine" class="stepper-progress-line" style="width: 12%;"></div>
+              
+              <div class="step-node active">
+                <div class="step-circle">1</div>
+                <div class="step-title" data-i18n="feat.step_referred">Referred</div>
+              </div>
+
+              <div class="step-node">
+                <div class="step-circle">2</div>
+                <div class="step-title" data-i18n="feat.step_arrived">Arrived</div>
+              </div>
+
+              <div class="step-node">
+                <div class="step-circle">3</div>
+                <div class="step-title" data-i18n="feat.step_consulted">Consulted</div>
+              </div>
+
+              <div class="step-node">
+                <div class="step-circle">4</div>
+                <div class="step-title" data-i18n="feat.step_completed">Completed</div>
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; border-radius: var(--radius-md); padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem;">
+              <div style="font-size: 0.825rem; color: #334155;">
+                <span id="referralStepDescription" data-i18n="asha_dash.ref_current_stage">Current Stage: Patient referred from Sub-Centre Vadgaon to Rural Hospital for ultrasound scan.</span>
+              </div>
+              <button type="button" id="advanceReferralStepBtn" class="btn-auth-primary" style="padding: 0.45rem 1rem; font-size: 0.8rem; white-space: nowrap;">
+                <span data-i18n="asha_dash.advance_ref_btn">Advance Referral Status Step ➔</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Follow-Up Management (Requirement 3) -->
+        <section id="ashaFollowUpsSection" style="margin-bottom: 3rem; scroll-margin-top: 5rem;">
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🔔</span> <span data-i18n="asha_dash.flw_mgmt_title">Follow-Up Schedule Management</span>
+          </h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.15rem;" data-i18n="asha_dash.flw_mgmt_sub">
+            Continuous maternal and chronic illness monitoring at the doorstep.
+          </p>
+
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+            <!-- Follow up Tabs -->
+            <div style="display: flex; gap: 0.5rem; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 0.85rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+              <button type="button" class="auth-tab-btn active asha-flw-tab" data-flw-cat="all" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" data-i18n="asha_dash.tab_all_tasks">
+                All Tasks (4)
+              </button>
+              <button type="button" class="auth-tab-btn asha-flw-tab" data-flw-cat="today" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" data-i18n="asha_dash.tab_due_today">
+                Due Today (1)
+              </button>
+              <button type="button" class="auth-tab-btn asha-flw-tab" data-flw-cat="upcoming" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" data-i18n="asha_dash.tab_upcoming">
+                Upcoming (1)
+              </button>
+              <button type="button" class="auth-tab-btn asha-flw-tab" data-flw-cat="overdue" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" data-i18n="asha_dash.tab_overdue">
+                Overdue (1)
+              </button>
+              <button type="button" class="auth-tab-btn asha-flw-tab" data-flw-cat="completed" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;" data-i18n="asha_dash.tab_completed">
+                Completed (1)
+              </button>
+            </div>
+
+            <!-- Follow-up Items Container -->
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <!-- Item 1: Sita Devi -->
+              <div class="asha-flw-item field-action-card" data-cat="today" style="margin-bottom: 0; border-left: 4px solid #f59e0b; background: #fffbeb;">
+                <div class="action-icon-circle" style="background: #fef3c7; color: #b45309;">🤰</div>
+                <div class="action-content">
+                  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                    <div class="action-title" data-i18n="asha_dash.flw1_title">Sita Devi — ANC 2nd Trimester Home Check</div>
+                    <span class="triage-badge triage-badge-priority" data-i18n="asha_dash.flw1_due_tag">Due: 10 September (Today)</span>
+                  </div>
+                  <div class="action-desc"><span data-i18n="asha_dash.flw_task_sita">Check blood pressure, verify IFA & Calcium adherence, inspect pedal edema.</span></div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn-auth-primary btn-flw-complete" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" data-i18n="features.btn_mark_done">Mark Completed ✓</button>
+                  <button type="button" class="btn-hero-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.75rem; color: #185a42; border-color: #cbd5e1;" onclick="showToast(t('toast.flw_rescheduled', 'Follow-up rescheduled by 2 days.'))" data-i18n="asha_dash.btn_reschedule">
+                    Reschedule
+                  </button>
+                </div>
+              </div>
+
+              <!-- Item 2: Anita Shinde -->
+              <div class="asha-flw-item field-action-card" data-cat="upcoming" style="margin-bottom: 0;">
+                <div class="action-icon-circle">🌡️</div>
+                <div class="action-content">
+                  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                    <div class="action-title" data-i18n="asha_dash.flw2_title">Anita Shinde — Post-Febrile Vitals Verification</div>
+                    <span class="triage-badge" style="background: #eff6ff; color: #1d4ed8;" data-i18n="asha_dash.flw2_due_tag">Due: 12 September</span>
+                  </div>
+                  <div class="action-desc"><span data-i18n="asha_dash.flw_task_anita">Check temperature and hydration status following fever consultation.</span></div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn-auth-primary btn-flw-complete" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" data-i18n="features.btn_mark_done">
+                    Mark Completed ✓
+                  </button>
+                </div>
+              </div>
+
+              <!-- Item 3: Ramesh Patil -->
+              <div class="asha-flw-item field-action-card" data-cat="overdue" style="margin-bottom: 0; border-left: 4px solid #ef4444; background: #fff5f5;">
+                <div class="action-icon-circle" style="background: #fee2e2; color: #dc2626;">🩸</div>
+                <div class="action-content">
+                  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                    <div class="action-title" data-i18n="asha_dash.flw3_title">Ramesh Patil — Monthly Fasting Blood Sugar & BP Log</div>
+                    <span class="triage-badge triage-badge-high" data-i18n="asha_dash.flw3_due_tag">Overdue: 07 September</span>
+                  </div>
+                  <div class="action-desc"><span data-i18n="asha_dash.flw_task_ramesh">Fasting glucometer test was due last week. Home visit pending.</span></div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn-auth-primary btn-flw-complete" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" data-i18n="features.btn_mark_done">
+                    Mark Completed ✓
+                  </button>
+                </div>
+              </div>
+
+              <!-- Item 4: Sunita Gaikwad -->
+              <div class="asha-flw-item field-action-card" data-cat="completed" style="margin-bottom: 0; opacity: 0.85;">
+                <div class="action-icon-circle">👶</div>
+                <div class="action-content">
+                  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                    <div class="action-title" data-i18n="asha_dash.flw4_title">Sunita Gaikwad — Postnatal Day 14 Home Check</div>
+                    <span class="triage-badge triage-badge-normal" data-i18n="common.badge_completed">Completed ✓</span>
+                  </div>
+                  <div class="action-desc"><span data-i18n="asha_dash.flw_task_pooja">Baby breastfeeding well, newborn weight 3.1 kg, cord healthy.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Medicine Availability (Requirement 3) -->
+        <section id="ashaMedicineSection" style="margin-bottom: 3rem; scroll-margin-top: 5rem;">
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary-darkest); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>💊</span> <span data-i18n="asha_dash.med_mgmt_title">Medicine Availability & Stock Distance</span>
+          </h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;" data-i18n="asha_dash.med_mgmt_sub">Search medicines to advise villagers where stock exists, saving unnecessary travel time and expenses.</p>
+
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+            <div style="margin-bottom: 1.25rem;">
+              <label for="ashaMedSearchInput" class="auth-label" data-i18n="asha_dash.med_search_label">Search Medicine or Drug Category</label>
+              <div class="auth-input-wrapper">
+                <span class="auth-input-icon">🔍</span>
+                <input type="text" id="ashaMedSearchInput" class="auth-input" placeholder="Type Paracetamol, IFA, Calcium, Amoxicillin..." data-i18n-placeholder="asha_dash.med_search_ph"
+                  value="Paracetamol" />
+              </div>
+              <div class="med-quick-filters" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.65rem;">
+                <button type="button" class="btn-hero-secondary asha-med-filter-pill active" data-filter="all" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; border-color: #cbd5e1;">All Medicines</button>
+                <button type="button" class="btn-hero-secondary asha-med-filter-pill" data-filter="Paracetamol" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; border-color: #cbd5e1;">Paracetamol</button>
+                <button type="button" class="btn-hero-secondary asha-med-filter-pill" data-filter="Iron" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; border-color: #cbd5e1;">Iron & Folic Acid</button>
+                <button type="button" class="btn-hero-secondary asha-med-filter-pill" data-filter="Calcium" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; border-color: #cbd5e1;">Calcium</button>
+                <button type="button" class="btn-hero-secondary asha-med-filter-pill" data-filter="Amoxicillin" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; border-color: #cbd5e1;">Amoxicillin</button>
+              </div>
+            </div>
+
+            <!-- Dynamic stock results container -->
+            <div id="ashaMedResults">
+              <!-- Rendered by app.js -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ======================================================================
+         MODALS (Requirement 3)
+         ====================================================================== -->
+
+    <!-- Modal 1: Patient Registration -->
+    <div id="ashaRegPatientModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 520px;">
+        <div class="modal-header">
+          <div class="modal-title" data-i18n="asha_dash.modal_reg_title">➕ Register New Patient</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('ashaRegPatientModal'))">✕</button>
+        </div>
+        <form id="ashaRegPatientForm">
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaRegName" data-i18n="auth.full_name">Full Name *</label>
+            <input type="text" id="ashaRegName" class="auth-input" placeholder="e.g. Kavita Suresh Jadhav" required />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="ashaRegAge" data-i18n="asha_dash.lbl_age">Age *</label>
+              <input type="number" id="ashaRegAge" class="auth-input" min="1" max="110" placeholder="e.g. 26" required />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="ashaRegGender" data-i18n="asha_dash.lbl_gender">Gender *</label>
+              <select id="ashaRegGender" class="auth-input" required>
+                <option value="Female" data-i18n="asha_dash.opt_female">Female</option>
+                <option value="Male" data-i18n="asha_dash.opt_male">Male</option>
+                <option value="Other" data-i18n="comp.opt_other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaRegVillage" data-i18n="asha_modal.lbl_village">Village / Gaothan *</label>
+            <input type="text" id="ashaRegVillage" class="auth-input" value="Vadgaon" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaRegPhone" data-i18n="asha_modal.lbl_phone">Phone Number *</label>
+            <input type="tel" id="ashaRegPhone" class="auth-input" placeholder="e.g. 9823456711" pattern="[0-9+\s-]{8,15}" required />
+          </div>
+          <div style="background: #f0fdf4; border: 1px dashed #86efac; border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; font-size: 0.775rem; color: #166534; margin-bottom: 1.25rem;" data-i18n="asha_dash.info_id_gen">
+            ℹ️ A unique Government MMC Patient ID (e.g. <strong>MMC-PT-XXX</strong>) will be auto-generated upon registration.
+          </div>
+          <button type="submit" class="btn-auth-primary" style="width: 100%;" data-i18n="asha_modal.btn_reg_gen">
+            Register Patient & Generate ID ➔
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 2: Risk Assessment & Priority Triage -->
+    <div id="ashaRiskAssessModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 540px;">
+        <div class="modal-header">
+          <div class="modal-title" data-i18n="asha_modal.triage_heading">⚠️ Risk Assessment & Priority Triage</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('ashaRiskAssessModal'))">✕</button>
+        </div>
+        
+        <div class="triage-disclaimer-box" data-i18n="asha_dash.info_triage_disclaimer">
+          ℹ️ <strong data-i18n="asha_modal.protocol_reminder_title">Field Protocol Reminder:</strong> This is a <strong>risk screening and priority triage system</strong>, NOT a clinical diagnosis. It flags patients needing earlier professional doctor evaluation.
+        </div>
+
+        <form id="ashaRiskAssessForm">
+          <div class="auth-form-group">
+            <label class="auth-label" for="triagePatientSelect" data-i18n="asha_modal.lbl_select_patient">Select Patient *</label>
+            <select id="triagePatientSelect" class="auth-input" required>
+              <option value="Sita Devi" data-i18n="opt.sita_devi">Sita Devi (MMC-PT-108) — Pregnant 24w</option>
+              <option value="Anita Shinde" data-i18n="opt.anita_shinde">Anita Shinde (MMC-PT-109) — Acute Illness</option>
+              <option value="Ramesh Patil" data-i18n="opt.ramesh_patil">Ramesh Patil (MMC-PT-110) — Chronic Diabetic</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="triageBpSystolic" data-i18n="asha_modal.lbl_sbp">Systolic BP (mmHg) *</label>
+              <input type="number" id="triageBpSystolic" class="auth-input" value="138" min="60" max="260" required />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="triageBpDiastolic" data-i18n="asha_modal.lbl_dbp">Diastolic BP (mmHg) *</label>
+              <input type="number" id="triageBpDiastolic" class="auth-input" value="88" min="40" max="150" required />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="triagePulse" data-i18n="asha_modal.lbl_pulse">Pulse Rate (bpm) *</label>
+              <input type="number" id="triagePulse" class="auth-input" value="78" min="30" max="220" required />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="triageSpo2" data-i18n="asha_modal.lbl_spo2">SpO2 Oxygen (%) *</label>
+              <input type="number" id="triageSpo2" class="auth-input" value="98" min="50" max="100" required />
+            </div>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="triagePregnancy" data-i18n="asha_modal.lbl_pregnancy">Pregnancy Status *</label>
+            <select id="triagePregnancy" class="auth-input" required>
+              <option value="yes" data-i18n="asha_modal.opt_pregnant">Pregnant (ANC Mother)</option>
+              <option value="no" data-i18n="asha_modal.opt_non_pregnant">Non-Pregnant</option>
+            </select>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" data-i18n="asha_modal.lbl_warning_signs">Observed High-Risk Warning Signs</label>
+            <div style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.8rem; color: #475569;">
+              <label><input type="checkbox" checked /> <span data-i18n="triage.sym_headache">Persistent frontal headache / blurry vision</span></label>
+              <label><input type="checkbox" checked /> <span data-i18n="triage.sym_edema">Swelling of feet / face (Pedal edema)</span></label>
+              <label><input type="checkbox" /> <span data-i18n="triage.sym_fetal">Decreased fetal movements</span></label>
+              <label><input type="checkbox" /> <span data-i18n="triage.sym_breathless">Breathlessness at rest</span></label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-auth-primary" style="width: 100%;" data-i18n="asha_modal.btn_calc_triage">
+            Calculate Priority Triage Score ➔
+          </button>
+        </form>
+
+        <div id="ashaTriageResultBox" style="display: none;"></div>
+      </div>
+    </div>
+
+    <!-- Modal 3: Book Appointment (ASHA) -->
+    <div id="ashaBookApptModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 500px;">
+        <div class="modal-header">
+          <div class="modal-title" data-i18n="asha_modal.book_heading">📅 Book Appointment for Villager</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('ashaBookApptModal'))">✕</button>
+        </div>
+        <form id="ashaBookApptForm">
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaBookPatientSelect" data-i18n="asha_dash.modal_appt_patient">Select Patient</label>
+            <select id="ashaBookPatientSelect" class="auth-input" required>
+              <option value="Sita Devi" data-i18n="opt.sita_devi">Sita Devi (MMC-PT-108)</option>
+              <option value="Anita Shinde" data-i18n="opt.anita_shinde">Anita Shinde (MMC-PT-109)</option>
+              <option value="Ramesh Patil" data-i18n="opt.ramesh_patil">Ramesh Patil (MMC-PT-110)</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaBookFacilitySelect" data-i18n="asha_dash.modal_appt_facility">Facility & Doctor</label>
+            <select id="ashaBookFacilitySelect" class="auth-input" required>
+              <option value="PHC ABC — Dr. Sharma" data-i18n="opt.phc_dr_sharma">PHC ABC — Dr. Sharma (Medical Officer)</option>
+              <option value="Sub-Centre Vadgaon — Visiting Doctor" data-i18n="opt.visiting_doctor">Sub-Centre Vadgaon — Visiting Doctor</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaBookDateInput" data-i18n="asha_dash.modal_appt_date">Appointment Date *</label>
+            <input type="date" id="ashaBookDateInput" class="auth-input" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaBookSlotSelect" data-i18n="asha_dash.modal_appt_slot">Available Slot</label>
+            <select id="ashaBookSlotSelect" class="auth-input" required>
+              <option value="10:30 AM" data-i18n="slot_opt.1030">10:30 AM — Available</option>
+              <option value="11:15 AM" data-i18n="slot_opt.1115">11:15 AM — Available</option>
+              <option value="12:00 PM" data-i18n="slot_opt.1200">12:00 PM — Available</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-auth-primary" style="width: 100%;" data-i18n="asha_dash.modal_appt_btn">
+            Confirm & Issue OPD Token ➔
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 4: Teleconsultation -->
+    <div id="ashaTeleconsultModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 480px;">
+        <div class="modal-header">
+          <div class="modal-title" data-i18n="asha_modal.tele_heading">📞 Frontline Teleconsultation</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('ashaTeleconsultModal'))">✕</button>
+        </div>
+        <div style="padding: 1rem 0; font-size: 0.85rem; color: #334155; line-height: 1.5;">
+          <p data-i18n="tele.connect_desc">Connect live from <strong>Sub-Centre Vadgaon Tablet</strong> to <strong>PHC ABC OPD</strong>:</p>
+          <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: var(--radius-md); padding: 0.85rem; margin: 0.85rem 0;">
+            <div>👨‍⚕️ <strong data-i18n="asha_modal.doctor_online_lbl">Doctor Online:</strong> <span data-i18n="tele.doc_sharma">Dr. Sharma (Medical Officer)</span></div>
+            <div>📶 <strong data-i18n="asha_modal.link_status_lbl">Link Status:</strong> <span data-i18n="tele.secure_ready">Secure Frontline Telemedicine Ready</span></div>
+            <div>👥 <strong data-i18n="asha_modal.active_patient_lbl">Active Patient:</strong> <span data-i18n="tele.pat_sita">Sita Devi (24w ANC)</span></div>
+          </div>
+          <button type="button" class="btn-auth-primary" style="width: 100%;" onclick="closeModal(document.getElementById('ashaTeleconsultModal')); showToast(t('toast.teleconsult_connecting', 'Connecting teleconsultation stream with Dr. Sharma...'));" data-i18n="asha_modal.btn_start_tele">
+            Start Live Consultation Session ➔
+          </button>
+        </div>
+      </div>
+    </div>
+    <button type="button" id="ashaTeleconsultBtn" style="display: none;" onclick="openModal(document.getElementById('ashaTeleconsultModal'))"></button>
+
+    <!-- Modal 5: Create Referral -->
+    <div id="ashaCreateReferralModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 500px;">
+        <div class="modal-header">
+          <div class="modal-title" data-i18n="asha_modal.ref_facility_heading">🔄 Create Facility E-Referral</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('ashaCreateReferralModal'))">✕</button>
+        </div>
+        <form id="ashaCreateReferralForm">
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaRefPatientSelect" data-i18n="asha_dash.modal_ref_patient">Patient</label>
+            <select id="ashaRefPatientSelect" class="auth-input" required>
+              <option value="Sita Devi" data-i18n="opt.sita_devi">Sita Devi (MMC-PT-108)</option>
+              <option value="Anita Shinde" data-i18n="opt.anita_shinde">Anita Shinde (MMC-PT-109)</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaRefFacilitySelect" data-i18n="asha_dash.modal_ref_dest">Destination Facility</label>
+            <select id="ashaRefFacilitySelect" class="auth-input" required>
+              <option value="Rural Hospital (RH) Vadgaon" data-i18n="p_dash.ref_hospital">Rural Hospital (RH) Vadgaon</option>
+              <option value="Sub-District Hospital" data-i18n="common.opt_sub_district_hospital">Sub-District Hospital</option>
+            </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="ashaRefReasonInput" data-i18n="asha_dash.modal_ref_reason">Clinical Reason</label>
+            <input type="text" id="ashaRefReasonInput" class="auth-input" placeholder="e.g. Ultrasound scan, specialist evaluation" required />
+          </div>
+          <button type="submit" class="btn-auth-primary" style="width: 100%;" data-i18n="asha_dash.modal_ref_btn">
+            Issue E-Referral Slip ➔
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 6: Emergency Alert (ASHA) -->
+    <div id="ashaEmergencyModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width: 480px; border-top: 5px solid #dc2626;">
+        <div class="modal-header">
+          <div class="modal-title" style="color: #991b1b;" data-i18n="dash.sos_modal_title">🚨 Emergency Dispatch Triggered</div>
+          <button type="button" class="modal-close-btn" onclick="closeModal(document.getElementById('ashaEmergencyModal'))">✕</button>
+        </div>
+        <div style="padding: 1rem 0; font-size: 0.85rem; color: #334155; line-height: 1.5;">
+          <p data-i18n="asha_modal.sos_red_alert">ASHA Frontline Red Alert triggered for Circle #14:</p>
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-md); padding: 0.75rem; margin: 0.75rem 0;">
+            <div>🚑 <strong data-i18n="asha_modal.amb_lbl">108 Ambulance:</strong> <span data-i18n="sos.dispatched_subcentre">Dispatched to Sub-Centre Vadgaon</span></div>
+            <div>🏥 <strong data-i18n="asha_modal.rec_fac_lbl">Receiving Facility:</strong> <span data-i18n="sos.phc_casualty">PHC ABC Emergency Casualty</span></div>
+            <div>👩‍⚕️ <strong data-i18n="asha_modal.escort_asha_lbl">Escorting ASHA:</strong> <span data-i18n="dash.sos_contact_label">Sunita Tai (+91 98234 56789)</span></div>
+          </div>
+        </div>
+        <button type="button" class="btn-auth-primary" style="background: #991b1b; width: 100%;" onclick="closeModal(document.getElementById('ashaEmergencyModal')); showToast(t('toast.emergency_active', 'Emergency dispatch active.'));" data-i18n="p_dash.btn_understood">
+          Understood / Close
+        </button>
+      </div>
+    </div>
+    <button type="button" id="ashaSosBtn" style="display: none;" onclick="openModal(document.getElementById('ashaEmergencyModal'))"></button>
+    <button type="button" id="ashaEmergencyAlertBtn" style="display: none;" onclick="openModal(document.getElementById('ashaEmergencyModal'))"></button>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- Official Footer -->
+    <footer class="site-footer">
+      <div class="container footer-container">
+        <div class="footer-col footer-col-brand">
+          <div class="footer-brand-wrap">
+            <img src="assets/mmc_logo.png" alt="MMC Logo" class="footer-logo-img" />
+            <div>
+              <div class="footer-brand-title" data-i18n="brand.title">Maharashtra Medical Council, Mumbai</div>
+              <div class="footer-brand-sub" data-i18n="brand.subtitle">Swasthya Setu — ASHA Frontline Operations</div>
+            </div>
+          </div>
+          <p class="footer-desc" data-i18n="asha_dash.med_search_sub">
+            Equipping frontline ASHA workers with mobile triage, digital referrals, appointment booking, and door-to-door follow-up tracking.
+          </p>
+        </div>
+        <div class="footer-col">
+          <div class="footer-heading" data-i18n="drawer.portal_switch">Role Dashboards</div>
+          <ul class="footer-links">
+            <li><a href="asha-dashboard.html" data-i18n="auth.role_asha">ASHA Worker Dashboard</a></li>
+            <li><a href="patient-dashboard.html" data-i18n="auth.role_patient">Patient Dashboard</a></li>
+            <li><a href="doctor-dashboard.html" data-i18n="auth.role_doctor">Doctor Dashboard</a></li>
+            <li><a href="login.html" data-i18n="topbar.switch_role">Role Switcher / Sign In</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-heading" data-i18n="footer.emergency_heading">Operational Support</div>
+          <ul class="footer-links">
+            <li><a href="tel:108" data-i18n="footer.ambulance_108">Emergency Ambulance: 108</a></li>
+            <li><a href="tel:104" data-i18n="footer.women_104">ASHA Helpline: 104</a></li>
+            <li><a href="about.html" data-i18n="nav.about">Council Verification</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container footer-bottom-content">
+          <div data-i18n="footer.copyright">© 2026 Maharashtra Medical Council, Mumbai. Rural Healthcare Frontline Initiative (SIH 26 Prototype).</div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- App Logic Script -->
+    <script src="js/translations.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
